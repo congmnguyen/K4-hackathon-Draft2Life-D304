@@ -41,8 +41,11 @@ Tái tạo: `python3 scripts/analyze_survey.py --input "<CSV khảo sát>"`.
 
 ## Dữ liệu
 
-Repo **không commit** `data/vlearn-pack/` (data pack khoá) và **không commit** CSV khảo sát gốc — theo mục
-"Bảo mật dữ liệu được cung cấp" bên dưới và ràng buộc 3 của `01-de-bai.md`.
+- **CSV khảo sát gốc không nằm trong repo** — nó chứa họ tên/email/SĐT của 123 người. `.gitignore` chặn `*.csv`,
+  và `scripts/analyze_survey.py` có `assert` chặn PII lọt vào output.
+- `data/vlearn-pack/` (data pack khoá) đi kèm sẵn trong repo gốc ban tổ chức phát. Nhóm **không dùng** data pack này
+  cho hướng C — bằng chứng của nhóm là khảo sát 123 người tự thu. Nếu repo nộp là **public**, cần gỡ `data/vlearn-pack/`
+  khỏi cả lịch sử commit trước khi push (mục "Bảo mật dữ liệu" bên dưới, ý 2 và 3).
 
 ---
 
