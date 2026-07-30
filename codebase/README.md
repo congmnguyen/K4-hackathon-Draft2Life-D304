@@ -1,11 +1,17 @@
 # Draft2Life — prototype
 
-**Mức prototype khai báo tại CP2: `Mock`** — flow chính bấm đi hết được, dữ liệu giả, **chưa có AI thật**.
-Lời gọi AI thật vào ở CP3 (bắt buộc theo đề bài), tại đúng một chỗ đã chừa sẵn.
+**Mức prototype khai báo: `Mock`** — flow bấm được, mặt bằng dựng sẵn,
+**AI thật ở quyết định trung tâm**.
 
 ## Chạy
 
-Mở thẳng `codebase/index.html` bằng trình duyệt. Không cần server, không cần cài gì.
+```bash
+export OPENAI_API_KEY="..."        # key chỉ ở biến môi trường, không bao giờ xuống browser
+python3 codebase/server.py --port 8000
+```
+
+Mở http://127.0.0.1:8000. Không cần cài thư viện ngoài (chỉ stdlib Python).
+Model mặc định `gpt-4.1-mini`, đổi bằng `OPENAI_MODEL`.
 
 ## Lát cắt đang build
 
@@ -36,7 +42,8 @@ Mở thẳng `codebase/index.html` bằng trình duyệt. Không cần server, k
 |---|---|
 | Flow 4 bước, điều hướng, hoàn tác, nhật ký | **Thật** |
 | Render mặt bằng 2D + khối 3D isometric (SVG, chiếu iso trong `draw3d()`) | **Thật** — vẽ từ model dữ liệu, thay đổi hiện ra ngay |
-| Hàm `decide()` — quyết định route | **MOCK**, bảng tra bằng regex. **CP3 thay đúng hàm này bằng 1 lời gọi AI thật** trả JSON `{route, params, question, reason}`; phần render giữ nguyên |
+| Quyết định route + rút tham số | **THẬT** — 1 lời gọi OpenAI Responses API mỗi lần bấm "Dựng thử". Prompt: `prompt.py`, lời gọi: `decide.py`. Trace đầy đủ ở `logs/ai_trace.jsonl` |
+| Guard sau lời gọi AI | **THẬT** — `decide.py:guard()` kiểm bằng code: phòng có trên mặt bằng không, kích thước có nằm trong khoảng hợp lệ của loại phần tử không. Vi phạm → **không dựng gì**, hiện lý do |
 | Upload bản vẽ 2D thật → suy ra hình học | **Mock** — dùng 2 mặt bằng dựng sẵn. Ngoài lát cắt, xem non-goals trong `spec.md` |
 | Xuất bản vẽ / hồ sơ | **Mock** — chỉ hiện alert |
 
@@ -44,8 +51,19 @@ Khối `<div class="trace">` ở bước 4 in ra route + nguồn sự thật đa
 
 ## Kiểm thử
 
-Đã click-through toàn bộ 4 route bằng Playwright, không có lỗi runtime.
-Golden set ≥20 case và bảng kết quả lượt 1 vào `eval/` ở CP3.
+- Click-through toàn bộ 4 route qua server thật bằng Playwright — không lỗi runtime.
+- Golden set 30 case: `eval/golden-set.jsonl`. Lượt 1 **80,0%** → lượt 2 **90,0%** (bar 85%).
+- Bộ đo gọi đúng `decide.py` mà bản demo dùng — không có đường code riêng cho eval.
+
+## File
+
+| File | Vai trò |
+|---|---|
+| `index.html` | Toàn bộ UI + render 2D/3D (SVG). Gọi `POST /api/decide` |
+| `prompt.py` | Hợp đồng prompt: 4 route, luật không tự điền tham số, quy ước đọc kích thước VN |
+| `decide.py` | Lời gọi OpenAI thật + `guard()` + ghi trace |
+| `server.py` | Server local stdlib, giữ API key phía server |
+| `logs/ai_trace.jsonl` | Trace mọi lời gọi: input, raw output, route, vi phạm guard, latency, token |
 
 ## `_archive-citeguard-huong-A/`
 

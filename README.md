@@ -22,8 +22,8 @@
 | R1 · Bằng chứng & impact | 15 | `spec.md` §1-§2 + `evidence/` + `scripts/analyze_survey.py` | 🟡 evidence xong, spec chưa |
 | R2 · Lát cắt & thiết kế | 15 | `spec.md` §4 | ⬜ |
 | R3 · Chỗ khó & kịch bản | 11 | `spec.md` §5-§6 | ⬜ |
-| R4 · Kiểm thử | 15 | `spec.md` §7 + `eval/` | ⬜ |
-| R5 · Prototype chạy được | 8 | `codebase/` | 🟡 Mock bấm được, AI thật vào ở CP3 |
+| R4 · Kiểm thử | 15 | `spec.md` §7 + `eval/` | 🟡 golden set 30 case + 2 lượt chạy xong (80,0% → **90,0%**, bar 85%), spec chưa |
+| R5 · Prototype chạy được | 8 | `codebase/` | ✅ Mock + **AI thật** ở quyết định trung tâm, trace trong repo |
 | R6 · Validation với user | 8 | `validation/` | ⬜ |
 | R7 · Quy trình & repo | 3 | cấu trúc repo + README này | ✅ |
 

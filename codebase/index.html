@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Draft2Life — CP2 flow (Mock)</title>
+<title>Draft2Life — prototype</title>
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --line:#272e38; --ink:#e6edf3; --mut:#8b949e;
@@ -73,7 +73,7 @@
 <header>
   <span class="tag">Draft2Life</span>
   <h1>Sửa mô hình 3D bằng một câu tiếng Việt</h1>
-  <span class="mockflag">CP2 · Mock — dữ liệu giả, chưa nối AI thật</span>
+  <span class="mockflag">CP3 · Mock + AI thật ở quyết định trung tâm</span>
 </header>
 
 <main>
@@ -152,9 +152,9 @@
 
 <script>
 /* ─────────────────────────────────────────────────────────
-   MOCK. Toàn bộ hàm decide() dưới đây là bảng tra cứng —
-   CP3 sẽ thay đúng hàm này bằng 1 lời gọi AI thật trả JSON
-   {route, params, question, reason}. Phần render giữ nguyên.
+   Quyết định trung tâm = LỜI GỌI AI THẬT (xem hàm decide()).
+   Phần còn mock: 2 mặt bằng dựng sẵn thay cho upload bản vẽ 2D,
+   và nút "xuất bản vẽ". Mọi phần mock đều ghi rõ trong khối trace.
    ───────────────────────────────────────────────────────── */
 
 const PLANS = {
@@ -256,53 +256,86 @@ function wallSeg(el){
     : [mid[0]-half, mid[1], mid[0]+half, mid[1]];
 }
 
-/* ── QUYẾT ĐỊNH (mock — CP3 thay bằng AI call) ─────── */
-function decide(){
+/* ── QUYẾT ĐỊNH — LỜI GỌI AI THẬT ──────────────────────
+   Đây là quyết định trung tâm của lát cắt. Không có mock, không có fallback:
+   thiếu key / lỗi mạng thì hiện lỗi rõ chứ không tự bịa kết quả.
+   Guard deterministic chạy phía server (codebase/decide.py) sau mỗi lời gọi.
+   ──────────────────────────────────────────────────── */
+async function decide(){
   const t = document.getElementById('cmd').value.trim();
   if(!t) return;
-  const low = t.toLowerCase();
-  let r;
-
-  if (/(đập|chịu lực|pccc|kết cấu|bao nhiêu tiền|báo giá|giấy phép)/.test(low)) {
-    r = { route:'scope', reason:'Câu hỏi thuộc thẩm quyền kỹ sư kết cấu / cơ quan thẩm duyệt.' };
-  } else if (/bếp|nhà bếp/.test(low) && !plan.rooms.some(x=>/bếp/.test(x.label.toLowerCase()))) {
-    r = { route:'noev', reason:'Mặt bằng đang mở không có phòng bếp.' };
-  } else if (/cửa sổ|cửa/.test(low) && !/(tây|đông|nam|bắc)/.test(low)) {
-    r = { route:'clarify', missing:'vị trí tường',
-          question:'Bạn muốn cửa sổ ở tường nào?' };
-  } else if (/cửa sổ/.test(low)) {
-    const side = /tây/.test(low)?'W' : /đông/.test(low)?'E' : /bắc/.test(low)?'N':'S';
-    /* "1m2" trong tiếng Việt = 1,2 m — bắt cả dạng này lẫn "1.2m" */
-    const m = low.match(/(\d+)\s*m\s*(\d)\b/) || low.match(/(\d+(?:[.,]\d+)?)\s*m/);
-    const w = m ? (m[2] ? parseFloat(m[1]) + parseInt(m[2])/10
-                       : parseFloat(m[1].replace(',','.'))) : 1.2;
-    r = { route:'apply', el:{ type:'Cửa sổ', room:plan.rooms[0].id, side, w, h:1.2 } };
-  } else {
-    r = { route:'clarify', missing:'đối tượng cần sửa',
-          question:'Bạn muốn thêm, bỏ hay đổi kích thước thứ gì?' };
+  showPending(t);
+  try {
+    const res = await fetch('/api/decide', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ plan, text: t })
+    });
+    const r = await res.json();
+    if (!res.ok) { renderError(t, r.error || ('HTTP ' + res.status)); return; }
+    render(t, r);
+  } catch (e) {
+    renderError(t, 'Không gọi được server: ' + e.message +
+      '. Chạy `python3 codebase/server.py` và mở qua http://127.0.0.1:8000');
   }
-  render(t, r);
+}
+
+function showPending(text){
+  document.getElementById('echo').textContent = 'Câu của bạn: “' + text + '”';
+  document.getElementById('verdict').innerHTML =
+    '<div class="verdict"><div class="lbl">Đang hỏi AI…</div></div>';
+  document.getElementById('params').innerHTML = '';
+  document.getElementById('actions').innerHTML = '';
+  document.getElementById('trace').textContent = 'đang gọi model…';
+  go(4);
+}
+
+function renderError(text, msg){
+  document.getElementById('echo').textContent = 'Câu của bạn: “' + text + '”';
+  document.getElementById('verdict').innerHTML =
+    `<div class="verdict v-scope"><div class="lbl">Lỗi hệ thống</div><p>${msg}</p>
+     <p style="color:var(--mut);font-size:13px">Prototype không tự bịa kết quả khi không gọi được AI.</p></div>`;
+  document.getElementById('params').innerHTML = '';
+  const A = document.getElementById('actions'); A.innerHTML = '';
+  btn(A,'← Thử lại','primary', () => go(3));
+  document.getElementById('trace').textContent = 'lỗi: ' + msg;
 }
 
 const SIDE = {W:'phía tây', E:'phía đông', N:'phía bắc', S:'phía nam'};
+const ELEMENT = {cua_so:'Cửa sổ', cua_di:'Cửa đi', tuong:'Tường'};
+const HEIGHT  = {cua_so:1.2, cua_di:2.2, tuong:2.8};
+const MISSING = {element:'đối tượng cần sửa', room_id:'phòng', side:'tường nào', width_m:'kích thước'};
 
 function render(text, r){
   document.getElementById('echo').textContent = 'Câu của bạn: “' + text + '”';
   const V = document.getElementById('verdict'), P = document.getElementById('params'),
         A = document.getElementById('actions');
   P.innerHTML = ''; A.innerHTML = '';
+  const g = r._meta || {};
+
+  /* Guard chặn trước khi vẽ: model vi phạm hợp đồng thì KHÔNG dựng gì cả. */
+  if (g.blocked) {
+    V.innerHTML = `<div class="verdict v-scope"><div class="lbl">Đã chặn — AI trả kết quả không hợp lệ</div>
+      <p>Hệ thống kiểm lại kết quả của AI và phát hiện: ${g.violations.join(' · ')}.</p>
+      <p style="color:var(--mut);font-size:13px">Không dựng gì lên mô hình. Thà không làm còn hơn làm sai
+      rồi bạn mang số sai đi xuất hồ sơ.</p></div>`;
+    btn(A,'← Viết lại câu','primary', () => go(3));
+    finish(r, g);
+    return;
+  }
 
   if (r.route === 'apply') {
-    const room = plan.rooms.find(x=>x.id===r.el.room);
-    added.push(r.el);
-    history.push(`Thêm ${r.el.type.toLowerCase()} ${r.el.w}m × ${r.el.h}m — ${room.label}, tường ${SIDE[r.el.side]}`);
+    const tg = r.target, room = plan.rooms.find(x=>x.id===tg.room_id);
+    const el = { type: ELEMENT[tg.element], room: tg.room_id, side: tg.side,
+                 w: tg.width_m, h: HEIGHT[tg.element] };
+    added.push(el);
+    history.push(`Thêm ${el.type.toLowerCase()} ${el.w}m × ${el.h}m — ${room.label}, tường ${SIDE[el.side]}`);
     V.innerHTML = `<div class="verdict v-apply"><div class="lbl">Đã dựng</div>
-      <p>Đã thêm ${r.el.type.toLowerCase()} vào tường ${SIDE[r.el.side]} ${room.label.toLowerCase()}.</p></div>`;
-    P.innerHTML = `<div class="box"><h4>Thông số đã dùng</h4><table>
+      <p>Đã thêm ${el.type.toLowerCase()} vào tường ${SIDE[el.side]} ${room.label.toLowerCase()}.</p></div>`;
+    P.innerHTML = `<div class="box"><h4>Thông số AI đã dùng</h4><table>
       <tr><td>Phòng</td><td>${room.label}</td></tr>
-      <tr><td>Tường</td><td>${SIDE[r.el.side]}</td></tr>
-      <tr><td>Kích thước</td><td>${r.el.w} m × ${r.el.h} m</td></tr>
-      <tr><td>Cao bệ cửa</td><td>0,9 m (mặc định)</td></tr></table>
+      <tr><td>Tường</td><td>${SIDE[el.side]}</td></tr>
+      <tr><td>Kích thước</td><td>${el.w} m × ${el.h} m</td></tr>
+      <tr><td>Căn cứ</td><td>${r.reason || '—'}</td></tr></table>
       <p class="caveat">⚠ Thông số ước tính từ mặt bằng — kiểm lại trước khi xuất hồ sơ.</p></div>`;
     btn(A,'Hoàn tác','', undo);
     btn(A,'Không phải ý tôi →','', () => go(3));
@@ -312,18 +345,22 @@ function render(text, r){
   if (r.route === 'clarify') {
     V.innerHTML = `<div class="verdict v-clarify"><div class="lbl">Cần thêm 1 thông tin</div>
       <p>${r.question}</p><p style="color:var(--mut);font-size:13px">
-      Thiếu <b>${r.missing}</b>. Đoán bừa ở đây thì số sai đi thẳng vào hồ sơ xuất ra — nên hỏi lại.</p></div>`;
-    if (r.missing === 'vị trí tường') {
+      Thiếu <b>${MISSING[r.missing] || r.missing}</b>. Đoán bừa ở đây thì số sai đi thẳng vào hồ sơ xuất ra — nên hỏi lại.</p></div>`;
+    if (r.missing === 'side') {
       ['W','E','N','S'].forEach(sd => btn(A, SIDE[sd], '', () => {
-        document.getElementById('cmd').value = text + ' ở tường ' + SIDE[sd] + ' ' +
-          plan.rooms[0].label.toLowerCase();
+        document.getElementById('cmd').value = text + ', tường ' + SIDE[sd];
+        decide();
+      }));
+    } else if (r.missing === 'room_id') {
+      plan.rooms.forEach(rm => btn(A, rm.label, '', () => {
+        document.getElementById('cmd').value = text + ', ở ' + rm.label.toLowerCase();
         decide();
       }));
     }
     btn(A,'← Viết lại câu','', () => go(3));
   }
 
-  if (r.route === 'noev') {
+  if (r.route === 'no_evidence') {
     V.innerHTML = `<div class="verdict v-noev"><div class="lbl">Không có căn cứ trên mặt bằng</div>
       <p>${r.reason} Mặt bằng hiện có: ${plan.rooms.map(x=>x.label).join(' · ')}.</p>
       <p style="color:var(--mut);font-size:13px">Không dựng thêm phòng không tồn tại trong bản vẽ.</p></div>`;
@@ -331,7 +368,7 @@ function render(text, r){
     btn(A,'Đổi mặt bằng khác','', () => go(1));
   }
 
-  if (r.route === 'scope') {
+  if (r.route === 'out_of_scope') {
     V.innerHTML = `<div class="verdict v-scope"><div class="lbl">Ngoài thẩm quyền</div>
       <p>${r.reason} Draft2Life không kết luận được việc này và sẽ không đoán.</p>
       <p style="color:var(--mut);font-size:13px">Việc làm được ngay: xuất bản vẽ hiện trạng kèm thông số
@@ -340,9 +377,18 @@ function render(text, r){
     btn(A,'← Hỏi việc khác','', () => go(3));
   }
 
+  finish(r, g);
+}
+
+/* trace kỹ thuật + nhật ký — hiện cả khi bị guard chặn */
+function finish(r, g){
   document.getElementById('trace').textContent =
-    'route  = ' + r.route + '\nnguồn  = mặt bằng đang mở (' + plan.rooms.length + ' phòng)' +
-    '\nMOCK   — CP3 sẽ thay bằng 1 lời gọi AI thật tại đúng chỗ này';
+    'route      = ' + r.route +
+    '\nmodel      = ' + (g.model || '?') + '   (lời gọi AI THẬT)' +
+    '\nlatency    = ' + (g.latency_ms || '?') + ' ms' +
+    '\nnguồn      = mặt bằng đang mở (' + plan.rooms.length + ' phòng)' +
+    '\nguard      = ' + (g.blocked ? 'CHẶN — ' + g.violations.join(' | ') : 'pass') +
+    '\ncòn mock   = upload bản vẽ 2D thật, xuất hồ sơ';
   document.getElementById('hist').innerHTML =
     history.length ? history.map(h=>'<li>'+h+'</li>').join('') : '<li>chưa có thay đổi nào</li>';
   draw3d('after3d');
