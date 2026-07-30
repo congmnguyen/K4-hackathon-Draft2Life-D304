@@ -18,9 +18,33 @@ from typing import Any
 
 from prompt import SYSTEM_PROMPT, build_input
 
+ROOT = Path(__file__).resolve().parent
 OPENAI_URL = "https://api.openai.com/v1/responses"
 DEFAULT_MODEL = "gpt-4.1-mini"
-TRACE_PATH = Path(__file__).resolve().parent / "logs" / "ai_trace.jsonl"
+TRACE_PATH = ROOT / "logs" / "ai_trace.jsonl"
+
+
+def _load_dotenv() -> None:
+    """Nạp biến từ file `.env` (codebase/.env hoặc .env ở gốc repo) vào os.environ.
+
+    Không ghi đè biến đã set sẵn trong môi trường — `.env` chỉ là fallback tiện
+    dùng cục bộ, biến môi trường thật (CI, shell) luôn thắng.
+    """
+    for candidate in (ROOT / ".env", ROOT.parent / ".env"):
+        if not candidate.is_file():
+            continue
+        for line in candidate.read_text(encoding="utf-8-sig").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            os.environ.setdefault(key, value)
+        break
+
+
+_load_dotenv()
 
 ROUTES = {"apply", "clarify", "no_evidence", "out_of_scope"}
 ELEMENTS = {"cua_so", "cua_di", "tuong"}
