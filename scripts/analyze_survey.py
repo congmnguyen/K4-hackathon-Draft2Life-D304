@@ -94,12 +94,46 @@ def main() -> None:
     args.output.write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    for column in PII_COLUMNS:
-        assert column not in args.output.read_text(encoding="utf-8"), f"PII leak: {column}"
+
+    # Log đầy đủ theo chuẩn Đường A: mọi câu hỏi + từng câu trả lời nguyên văn.
+    # Người trả lời được thay bằng mã R001..R123; 3 cột PII bị loại hoàn toàn.
+    asked = [c for c in columns if c not in PII_COLUMNS and c != "Timestamp"]
+    log_lines = [
+        "# Log khảo sát Đường A — nguyên văn, đã ẩn danh",
+        "",
+        f"- n = {total} người ngoài nhóm · {len(asked)} câu hỏi",
+        "- Sinh tự động bởi `scripts/analyze_survey.py`. File nguồn chứa họ tên/email/SĐT,",
+        "  **không nằm trong repo**; ba cột đó bị loại khỏi log này.",
+        "- Câu multi-select giữ nguyên dấu `;` như người trả lời chọn.",
+        "",
+        "## Bộ câu hỏi đã hỏi",
+        "",
+    ]
+    log_lines += [f"{i}. {q}" for i, q in enumerate(asked, 1)]
+    log_lines += ["", "## Từng câu trả lời nguyên văn", ""]
+    for index, row in enumerate(rows, 1):
+        log_lines.append(f"### R{index:03d}")
+        log_lines.append("")
+        for number, question in enumerate(asked, 1):
+            answer = (row.get(question) or "").strip() or "(bỏ trống)"
+            log_lines.append(f"{number}. {answer}")
+        log_lines.append("")
+
+    log_path = args.output.with_name("survey-log.md")
+    log_path.write_text("\n".join(log_lines) + "\n", encoding="utf-8")
+
+    for path in (args.output, log_path):
+        text = path.read_text(encoding="utf-8")
+        for column in PII_COLUMNS:
+            assert column not in text, f"PII leak ({column}) trong {path}"
+        for row in rows:
+            for column in PII_COLUMNS:
+                value = (row.get(column) or "").strip()
+                assert not (len(value) > 4 and value in text), f"PII leak giá trị trong {path}"
 
     print(
         f"SURVEY_OK n={total} sua_nhieu_lan={edits_often} "
-        f"san_sang_ai={ready_ai} muon_demo={wants_demo}"
+        f"san_sang_ai={ready_ai} muon_demo={wants_demo} log={log_path}"
     )
 
 
