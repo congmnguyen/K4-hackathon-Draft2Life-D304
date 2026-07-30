@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Draft2Life — demo slides</title>
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#0d1117;font:16px/1.5 ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif;color:#e6edf3}
+  .s{width:1280px;height:720px;padding:56px 64px;position:relative;
+     background:linear-gradient(160deg,#0f1720,#0d1117 55%);page-break-after:always;
+     display:flex;flex-direction:column;overflow:hidden}
+  .s+.s{margin-top:24px}
+  .n{position:absolute;top:40px;right:56px;font:600 13px/1 ui-monospace,monospace;
+     letter-spacing:.18em;color:#f0883e}
+  .t{position:absolute;top:40px;left:64px;font:600 11px/1 ui-sans-serif;
+     letter-spacing:.22em;text-transform:uppercase;color:#6e7781}
+  h1{font-size:38px;line-height:1.15;margin:52px 0 6px;letter-spacing:-.01em}
+  h2{font-size:17px;font-weight:500;color:#8b949e;margin-bottom:26px}
+  .grid{display:grid;gap:16px;margin-top:auto;margin-bottom:auto}
+  .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .c{background:#161b22;border:1px solid #272e38;border-radius:12px;padding:20px 22px}
+  .c.hi{border-color:#f0883e;background:#1a1512}
+  .big{font:700 40px/1 ui-sans-serif;color:#f0883e;letter-spacing:-.02em}
+  .big.ok{color:#3fb950} .big.sm{font-size:30px}
+  .lbl{font-size:12.5px;color:#8b949e;margin-top:9px;line-height:1.45}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;color:#6e7781;font-weight:600;font-size:11px;letter-spacing:.1em;
+     text-transform:uppercase;padding:0 12px 9px 0;border-bottom:1px solid #272e38}
+  td{padding:11px 12px 11px 0;border-bottom:1px solid #1c222b;vertical-align:top}
+  tr.pick td{color:#f0883e;font-weight:600}
+  .q{border-left:3px solid #f0883e;padding:14px 20px;background:#161b22;
+     border-radius:0 10px 10px 0;font-size:16px;line-height:1.55}
+  .q cite{display:block;margin-top:9px;font-style:normal;font-size:12.5px;color:#6e7781}
+  .foot{position:absolute;bottom:34px;left:64px;right:64px;font-size:12px;color:#6e7781;
+        border-top:1px solid #1c222b;padding-top:12px}
+  ul{list-style:none} li{padding:9px 0;border-bottom:1px solid #1c222b;font-size:15px}
+  li b{color:#f0883e}
+  .tag{display:inline-block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+       color:#f0883e;border:1px solid #3a2a1c;border-radius:99px;padding:3px 11px;margin-bottom:8px}
+  .slice{font-size:19px;line-height:1.6;background:#161b22;border:1px solid #272e38;
+         border-radius:12px;padding:22px 26px}
+  .slice b{color:#f0883e}
+  .warn{color:#d29922} .bad{color:#f85149} .ok{color:#3fb950}
+  @media print{ body{background:#fff} .s+.s{margin-top:0} }
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="s">
+  <div class="t">Draft2Life · D304</div><div class="n">1 / 6</div>
+  <h1>Người dựng 3D không tắc ở lúc dựng.<br>Họ tắc ở lúc <span style="color:#f0883e">sửa</span>.</h1>
+  <h2>Sinh viên kiến trúc · KTS mới đi làm — người tự tay thao tác trong AutoCAD / 3ds Max / Revit</h2>
+  <div class="grid g4">
+    <div class="c hi"><div class="big">79,7%</div>
+      <div class="lbl">phải chỉnh sửa chi tiết (cửa, tường, nội thất) <b>nhiều lần</b><br>98/123</div></div>
+    <div class="c"><div class="big">63,4%</div>
+      <div class="lbl">mất ≥3 ngày cho một mô hình 3D từ bản vẽ 2D<br>78/123</div></div>
+    <div class="c"><div class="big">76,4%</div>
+      <div class="lbl">sẵn sàng dùng AI cho việc này<br>94/123 — ngưỡng đề bài ≥50%</div></div>
+    <div class="c"><div class="big sm">37 / 32</div>
+      <div class="lbl">khó khăn lớn nhất: <b>"sử dụng phần mềm 3D"</b> (37) và "khắc phục lỗi trong mô hình" (32)</div></div>
+  </div>
+  <div class="q" style="margin-top:20px">Khi tôi vừa nghĩ ra một thay đổi cho mô hình đang dựng, tôi muốn thấy ngay
+    nó trông thế nào, để quyết định giữ hay bỏ mà không mất nửa buổi thao tác phần mềm.
+    <cite>Core JTBD — spec.md §1</cite></div>
+  <div class="foot">Khảo sát n = <b>123 người ngoài nhóm</b> (70 sinh viên · 53 KTS đã đi làm) ·
+    log nguyên văn 14 câu hỏi × 123 câu trả lời: <b>evidence/survey-log.md</b> (2.117 dòng, đã loại PII)</div>
+</section>
+
+<!-- 2 -->
+<section class="s">
+  <div class="t">Vì sao chọn tính năng này</div><div class="n">2 / 6</div>
+  <h1>Ba ứng viên, cùng một bộ 123 người</h1>
+  <h2>Chọn cái phủ rộng nhất, lặp nhiều nhất, và có một quyết định AI tách bạch được</h2>
+  <table>
+    <tr><th>Ứng viên</th><th>Bao nhiêu người</th><th>Tần suất</th><th>Mỗi lần tốn gì</th><th>Build nổi?</th></tr>
+    <tr class="pick"><td><b>A · Vòng lặp sửa chi tiết</b></td><td>98/123 = 79,7%</td>
+      <td>lặp trong <i>từng</i> mô hình</td><td>hàng chục thao tác cho 1 thay đổi nói ra trong 5 giây</td>
+      <td>✅ 1 AI call</td></tr>
+    <tr><td>B · Dựng 3D lần đầu từ bản vẽ 2D</td><td>122/123</td><td>5-10 lần/tháng</td>
+      <td>≥3 ngày/mô hình</td><td>❌ cần vision hình học</td></tr>
+    <tr><td>C · Nhận diện & sửa lỗi mô hình</td><td>32/123 = 26%</td><td>cuối mỗi mô hình</td>
+      <td>lỗi lọt vào hồ sơ nộp</td><td>⚠️ không có nguồn quy chuẩn</td></tr>
+  </table>
+  <div class="grid g2" style="margin-top:22px">
+    <div class="c"><div class="tag">Loại B — dù pain to nhất</div>
+      <div class="lbl" style="font-size:14px">122/123 người gặp, nhưng lời giải là computer vision hình học.
+      Làm ẩu thì phần AI chỉ còn là "upload rồi chờ" — <b>không có quyết định AI nào để soi 4 lớp chỗ khó</b>.</div></div>
+    <div class="c"><div class="tag">Loại C</div>
+      <div class="lbl" style="font-size:14px">Bằng chứng yếu nhất (26% so với 79,7%). Muốn bắt lỗi đúng thì nguồn sự thật
+      phải là quy chuẩn xây dựng — không có bản kiểm chứng được, sẽ rơi thẳng vào lớp ① bịa nguồn.</div></div>
+  </div>
+  <div class="foot">spec.md §2 — bảng impact đầy đủ + lý do chọn bằng số</div>
+</section>
+
+<!-- 3 -->
+<section class="s">
+  <div class="t">Giải pháp & demo live</div><div class="n">3 / 6</div>
+  <h1>Gõ một câu. AI quyết định đủ tham số chưa.</h1>
+  <div class="slice">
+    <b>Sinh viên kiến trúc</b> đang có mô hình 3D dựng từ mặt bằng 2D · <b>gõ một câu tiếng Việt</b>
+    mô tả chi tiết muốn sửa · <b>AI quyết định câu đó đã đủ tham số để thực thi hay còn thiếu</b> ·
+    trả về <b>mô hình đã cập nhật kèm thông số</b>, hoặc <b>đúng một câu hỏi làm rõ</b>.
+  </div>
+  <div class="c" style="margin-top:18px;border-color:#f0883e">
+    <div class="tag">Automation: Conditional — theo cost-of-error</div>
+    <div class="lbl" style="font-size:14.5px">
+      Dựng sai hình khối → user <b>thấy ngay và bấm Hoàn tác</b>, sửa rẻ → cho AI tự làm.<br>
+      AI <b>tự đoán tham số user chưa nói</b> → con số bịa trông y hệt số thật → mang đi xuất hồ sơ →
+      mất điểm đồ án, cắt sai vật tư, sửa đắt → <b>tuyệt đối không cho tự làm</b>.
+    </div>
+  </div>
+  <div class="grid g2" style="margin-top:18px">
+    <div class="c"><div class="tag ok" style="color:#3fb950;border-color:#1d3324">Demo 1 — case chuẩn</div>
+      <div class="lbl" style="font-size:14px">"Thêm một cửa sổ rộng <b>1m2</b> ở tường phía tây phòng khách"<br>
+      → dựng luôn + bảng 4 tham số AI đã dùng + cảnh báo kiểm lại trước khi xuất hồ sơ</div></div>
+    <div class="c"><div class="tag" style="color:#f85149;border-color:#3d1d1d">Demo 2 — case chỗ khó</div>
+      <div class="lbl" style="font-size:14px">"thêm cửa đi rộng <b>0.4m</b> ở tường phía bắc phòng ngủ"<br>
+      → AI trả apply, nhưng <b>guard chặn</b>: cửa đi 0,4 m không ai đi lọt. <b>Không dựng gì.</b></div></div>
+  </div>
+  <div class="foot">AI thật: <b>gpt-4.1-mini</b>, OpenAI Responses API · guard deterministic sau mỗi lời gọi ·
+    trace đầy đủ trong <b>codebase/logs/ai_trace.jsonl</b> · không có fallback giả</div>
+</section>
+
+<!-- 4 -->
+<section class="s">
+  <div class="t">Kết quả đo</div><div class="n">4 / 6</div>
+  <h1>96,7% — nhưng con số đó không phải phần đáng kể nhất</h1>
+  <h2>Quality bar chốt từ lượt 1 và giữ nguyên: ≥85% + 2 điều kiện cứng</h2>
+  <div class="grid g4">
+    <div class="c"><div class="big" style="color:#f85149">80,0%</div><div class="lbl">lượt 1 — 24/30<br>dưới bar</div></div>
+    <div class="c"><div class="big" style="color:#d29922">90,0%</div><div class="lbl">lượt 2 — 27/30<br>vượt bar</div></div>
+    <div class="c"><div class="big bad">90,0%</div><div class="lbl">lượt 3 — D2 tụt 29/30<br><b class="bad">trượt điều kiện cứng</b></div></div>
+    <div class="c hi"><div class="big ok">96,7%</div><div class="lbl">lượt 4 — 29/30 · D2 30/30<br><b class="ok">đạt cả 2 điều kiện cứng</b></div></div>
+  </div>
+  <div class="c" style="margin-top:20px;border-color:#f0883e">
+    <div class="tag">Failure đáng kể nhất — và nó là lỗi của chính nhóm</div>
+    <div class="lbl" style="font-size:14.5px">
+      Lượt 3 nhóm sửa được case nguy hiểm nhất (model đọc <b>"tường nam" thành hướng Bắc</b> — cửa mọc sai
+      mặt nhà, guard không bắt được vì N vẫn là giá trị hợp lệ). Nhưng chính bản sửa đó <b>làm vỡ điều kiện cứng</b>:
+      guard chặn nhầm ở route <i>no_evidence</i>, nơi gọi tên phòng không tồn tại chính là nội dung câu trả lời.<br><br>
+      <b>Hai lần sửa thì một lần lỗi nằm ở guard nhóm tự viết, không phải ở model.</b>
+      Nhìn % thì cả hai lần đều bị bỏ sót — phải đọc từng case mới thấy.
+    </div>
+  </div>
+  <div class="foot">Golden set <b>30 case</b> tự xây, phủ đủ 4 lớp chỗ khó (4 case/lớp) · 18/30 từ quan sát thực tế ·
+    còn 1 case fail (L4-02) — model hành xử <b>an toàn hơn</b> kỳ vọng, nhóm giữ nguyên expectation thay vì sửa golden set</div>
+</section>
+
+<!-- 5 -->
+<section class="s">
+  <div class="t">User thật nói gì</div><div class="n">5 / 6</div>
+  <h1>Vòng validation</h1>
+  <h2 class="warn">⚠ Slide này chỉ được trình bày sau khi đã chạy ≥5 phiên test thật — điền từ validation/feedback-log.md</h2>
+  <div class="grid g2">
+    <div class="c"><div class="tag">Quote 1</div>
+      <div class="lbl" style="font-size:14px">[nguyên văn] — [tên/vai, willing user?]</div></div>
+    <div class="c"><div class="tag">Quote 2</div>
+      <div class="lbl" style="font-size:14px">[nguyên văn] — [tên/vai, willing user?]</div></div>
+  </div>
+  <div class="c" style="margin-top:16px">
+    <div class="tag">Thay đổi đã làm từ feedback</div>
+    <div class="lbl" style="font-size:14px">[thay đổi] → ghi vào spec.md §9 Changelog<br>
+    hoặc: giữ nguyên vì [lý do có căn cứ]</div></div>
+  <div class="c" style="margin-top:16px;border-color:#f0883e">
+    <div class="tag">Giả thuyết nhóm muốn bị phá</div>
+    <div class="lbl" style="font-size:14px">Nhóm tin route <b>clarify</b> (hỏi lại thay vì đoán) là tính năng.
+    User có thể thấy nó là <b>phiền</b>. Nếu ≥3/5 người phàn nàn bị hỏi lại quá nhiều →
+    phải xem lại ranh giới conditional.</div></div>
+  <div class="foot">Nguồn người thử: <b>109/123</b> người khảo sát đã tick "muốn thử demo", 122/123 để lại liên hệ ·
+    5 người × 10 phút × 3 câu hỏi cố định — kịch bản trong spec.md §8</div>
+</section>
+
+<!-- 6 -->
+<section class="s">
+  <div class="t">Nếu có thêm 1 tuần</div><div class="n">6 / 6</div>
+  <h1>Ba việc, trỏ thẳng vào failure chưa xử</h1>
+  <ul style="margin-top:14px">
+    <li><b>1 · Guard ngữ nghĩa cho mọi tham số, không riêng hướng.</b>
+      Cách sửa case "tường nam" — bắt model trích nguyên văn cụm chữ rồi map lại bằng code — mới áp cho `side`.
+      Phải áp cho cả `room_id` và `width_m`, vì đó là loại lỗi tệ nhất: kết quả <i>trông đúng hoàn toàn</i>.</li>
+    <li><b>2 · Ổn định hoá case L4-02.</b>
+      Model lúc thì apply-rồi-bị-chặn, lúc thì tự hỏi lại. Cùng một input mà hai hành vi thì user không tin được.
+      Cần chốt: kích thước phi lý thì luôn hỏi lại, và đưa luật đó vào cả prompt lẫn guard.</li>
+    <li><b>3 · Đưa cho 5 người thật dùng và đo lại.</b>
+      Cả bộ đo hiện tại là nhóm tự chấm nhóm. Chưa có một người ngoài nào chạm vào prototype.</li>
+  </ul>
+  <div class="c" style="margin-top:auto;border-color:#f0883e">
+    <div class="tag">Bài học lớn nhất</div>
+    <div class="lbl" style="font-size:15.5px">
+      Nhóm bắt đầu bằng giả định người dùng là <b>chủ hộ sắp sửa nhà</b>. Đọc 123 câu trả lời khảo sát thì
+      không có <b>một</b> chủ hộ nào — toàn sinh viên kiến trúc và KTS. Và pain lớn nhất không phải "dựng 3D khó"
+      mà là <b>"sửa đi sửa lại"</b>.<br><br>
+      Nếu build trước rồi khảo sát sau, nhóm đã build đúng sản phẩm cho sai người.
+    </div>
+  </div>
+  <div class="foot">Draft2Life · D304 — Nguyễn Minh Công (2A202601945) · Nguyễn Văn Sáng (01252) · Diệp Đức Lai (01784)</div>
+</section>
+
+</body>
+</html>

@@ -24,7 +24,9 @@
 | R3 · Chỗ khó & kịch bản | 11 | `spec.md` §5 (10 kịch bản) + §6 (6 đường đi) | ✅ |
 | R4 · Kiểm thử | 15 | `spec.md` §7 + `eval/` | ✅ 30 case, 4 lượt: 80,0% → **96,7%** vs bar 85% |
 | R5 · Prototype chạy được | 8 | `codebase/` | ✅ Mock + **AI thật** ở quyết định trung tâm, trace trong repo |
-| R6 · Validation với user | 8 | `validation/` | ⬜ **việc còn lại — cần ≥5 người thật** |
+| R6 · Validation với user | 8 | `validation/` | ⬜ **việc còn lại — khung sẵn, cần 5 người thật ngồi thử** |
+
+**Ngoài rubric:** `demo-slides.pdf` (6 trang, nguồn `demo/slides.html`) · `reflection/` 3 file khung, mỗi người tự viết lại.
 | R7 · Quy trình & repo | 3 | cấu trúc repo + README này | ✅ |
 
 ## Bằng chứng — Đường A (khảo sát), n = 123 người ngoài nhóm
