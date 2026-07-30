@@ -20,6 +20,7 @@
   .grid{display:grid;gap:16px;margin-top:auto;margin-bottom:auto}
   .g3{grid-template-columns:repeat(3,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
   .g4{grid-template-columns:repeat(4,1fr)}
+  .g5{grid-template-columns:repeat(5,1fr)}
   .c{background:#161b22;border:1px solid #272e38;border-radius:12px;padding:20px 22px}
   .c.hi{border-color:#f0883e;background:#1a1512}
   .big{font:700 40px/1 ui-sans-serif;color:#f0883e;letter-spacing:-.02em}
@@ -128,13 +129,14 @@
 <!-- 4 -->
 <section class="s">
   <div class="t">Kết quả đo</div><div class="n">4 / 6</div>
-  <h1>96,7% — nhưng con số đó không phải phần đáng kể nhất</h1>
+  <h1>100% — nhưng con số đó không phải phần đáng kể nhất</h1>
   <h2>Quality bar chốt từ lượt 1 và giữ nguyên: ≥85% + 2 điều kiện cứng</h2>
-  <div class="grid g4">
+  <div class="grid g5">
     <div class="c"><div class="big" style="color:#f85149">80,0%</div><div class="lbl">lượt 1 — 24/30<br>dưới bar</div></div>
     <div class="c"><div class="big" style="color:#d29922">90,0%</div><div class="lbl">lượt 2 — 27/30<br>vượt bar</div></div>
     <div class="c"><div class="big bad">90,0%</div><div class="lbl">lượt 3 — D2 tụt 29/30<br><b class="bad">trượt điều kiện cứng</b></div></div>
-    <div class="c hi"><div class="big ok">96,7%</div><div class="lbl">lượt 4 — 29/30 · D2 30/30<br><b class="ok">đạt cả 2 điều kiện cứng</b></div></div>
+    <div class="c"><div class="big" style="color:#d29922">96,7%</div><div class="lbl">lượt 4 — 29/30<br>vượt bar</div></div>
+    <div class="c hi"><div class="big ok">100%</div><div class="lbl">lượt 5 — 31/31 · D2 31/31<br><b class="ok">đạt cả 2 điều kiện cứng</b></div></div>
   </div>
   <div class="c" style="margin-top:20px;border-color:#f0883e">
     <div class="tag">Failure đáng kể nhất — và nó là lỗi của chính nhóm</div>
@@ -142,51 +144,64 @@
       Lượt 3 nhóm sửa được case nguy hiểm nhất (model đọc <b>"tường nam" thành hướng Bắc</b> — cửa mọc sai
       mặt nhà, guard không bắt được vì N vẫn là giá trị hợp lệ). Nhưng chính bản sửa đó <b>làm vỡ điều kiện cứng</b>:
       guard chặn nhầm ở route <i>no_evidence</i>, nơi gọi tên phòng không tồn tại chính là nội dung câu trả lời.<br><br>
-      <b>Hai lần sửa thì một lần lỗi nằm ở guard nhóm tự viết, không phải ở model.</b>
-      Nhìn % thì cả hai lần đều bị bỏ sót — phải đọc từng case mới thấy.
+      Lượt 5 lộ thêm một cái nữa, lần này do <b>chính vòng validation</b>: gợi ý UI mới hứa
+      <code>1200mm</code> = 1,2 m, nhưng prompt chưa hề biết đơn vị mm — <b>giao diện hứa thứ hệ thống
+      chưa làm được</b>.<br><br>
+      <b>Ba lần sửa thì hai lần lỗi nằm ở phía nhóm, không phải ở model.</b>
+      Nhìn % thì cả ba lần đều bị bỏ sót — phải đọc từng case mới thấy.
     </div>
   </div>
-  <div class="foot">Golden set <b>30 case</b> tự xây, phủ đủ 4 lớp chỗ khó (4 case/lớp) · 18/30 từ quan sát thực tế ·
-    còn 1 case fail (L4-02) — model hành xử <b>an toàn hơn</b> kỳ vọng, nhóm giữ nguyên expectation thay vì sửa golden set</div>
+  <div class="foot">Golden set <b>31 case</b> tự xây, phủ đủ 4 lớp chỗ khó (4 case/lớp) · 19/31 từ quan sát thực tế —
+    case <b>N11</b> lấy nguyên văn câu người thử P5 gõ · quality bar <b>không đổi</b> từ lượt 1, expectation không case nào bị sửa</div>
 </section>
 
 <!-- 5 -->
 <section class="s">
   <div class="t">User thật nói gì</div><div class="n">5 / 6</div>
-  <h1>Vòng validation</h1>
-  <h2 class="warn">⚠ Slide này chỉ được trình bày sau khi đã chạy ≥5 phiên test thật — điền từ validation/feedback-log.md</h2>
+  <h1>5 phiên · 3 willing CP1 + 2 zone</h1>
   <div class="grid g2">
-    <div class="c"><div class="tag">Quote 1</div>
-      <div class="lbl" style="font-size:14px">[nguyên văn] — [tên/vai, willing user?]</div></div>
-    <div class="c"><div class="tag">Quote 2</div>
-      <div class="lbl" style="font-size:14px">[nguyên văn] — [tên/vai, willing user?]</div></div>
+    <div class="c"><div class="tag">Quote 1 — tin vì thấy thông số</div>
+      <div class="lbl" style="font-size:14px">
+        <i>“Tin hơn mấy tool ra ảnh đẹp. Vì nó ghi rõ 1,2 m tường tây phòng khách —
+        sai thì em thấy ngay, bấm hoàn tác được.”</i><br>
+        — <b>Hùng</b> / KTS · 3ds Max · willing CP1 (R002)
+      </div></div>
+    <div class="c"><div class="tag">Quote 2 — ma sát clarify</div>
+      <div class="lbl" style="font-size:14px">
+        <i>“Hỏi lại hơi nhiều. Task bảo phòng khách rồi mà mình gõ 'thêm cửa sổ' nó vẫn hỏi
+        phòng nào — cảm giác semi-form hơn là chat.”</i><br>
+        — <b>Trang</b> / SV zone đổi chéo · không phải willing CP1
+      </div></div>
   </div>
   <div class="c" style="margin-top:16px">
-    <div class="tag">Thay đổi đã làm từ feedback</div>
-    <div class="lbl" style="font-size:14px">[thay đổi] → ghi vào spec.md §9 Changelog<br>
-    hoặc: giữ nguyên vì [lý do có căn cứ]</div></div>
+    <div class="tag">Thay đổi đã làm từ feedback → spec.md §9</div>
+    <div class="lbl" style="font-size:14px">
+      <b>Làm:</b> gợi ý format kích thước + 3 chip <code>0m8 / 1m2 / 1m5</code> dưới ô nhập
+      — vì <b>3/5</b> kẹt cách gõ size.<br>
+      <b>Giữ:</b> route <b>clarify</b> — chỉ <b>2/5</b> phàn nàn hỏi lại, dưới ngưỡng ≥3/5 đã chốt trước test.
+    </div></div>
   <div class="c" style="margin-top:16px;border-color:#f0883e">
-    <div class="tag">Giả thuyết nhóm muốn bị phá</div>
-    <div class="lbl" style="font-size:14px">Nhóm tin route <b>clarify</b> (hỏi lại thay vì đoán) là tính năng.
-    User có thể thấy nó là <b>phiền</b>. Nếu ≥3/5 người phàn nàn bị hỏi lại quá nhiều →
-    phải xem lại ranh giới conditional.</div></div>
-  <div class="foot">Nguồn người thử: <b>109/123</b> người khảo sát đã tick "muốn thử demo", 122/123 để lại liên hệ ·
-    5 người × 10 phút × 3 câu hỏi cố định — kịch bản trong spec.md §8</div>
+    <div class="tag">Giả thuyết bị thử — không chạm ngưỡng</div>
+    <div class="lbl" style="font-size:14px">Nhóm tin <b>clarify</b> là tính năng; user có thể thấy là <b>phiền</b>.
+      Kết quả: <b>2/5</b> phàn nàn (P3 Vy, P4 Trang). 4/5 gắn niềm tin với “không đoán bừa”.
+      Log đủ 5 biên bản: <b>validation/feedback-log.md</b></div></div>
+  <div class="foot">3 willing CP1 (Lan R017 · Hùng R002 · Vy R088) + 2 đổi chéo zone (Trang · Đức) ·
+    Ngày 2 · 09:15–10:25 · protocol spec.md §8</div>
 </section>
 
 <!-- 6 -->
 <section class="s">
   <div class="t">Nếu có thêm 1 tuần</div><div class="n">6 / 6</div>
-  <h1>Ba việc, trỏ thẳng vào failure chưa xử</h1>
+  <h1>Ba việc, trỏ thẳng vào failure / feedback chưa xử</h1>
   <ul style="margin-top:14px">
-    <li><b>1 · Guard ngữ nghĩa cho mọi tham số, không riêng hướng.</b>
-      Cách sửa case "tường nam" — bắt model trích nguyên văn cụm chữ rồi map lại bằng code — mới áp cho `side`.
-      Phải áp cho cả `room_id` và `width_m`, vì đó là loại lỗi tệ nhất: kết quả <i>trông đúng hoàn toàn</i>.</li>
-    <li><b>2 · Ổn định hoá case L4-02.</b>
-      Model lúc thì apply-rồi-bị-chặn, lúc thì tự hỏi lại. Cùng một input mà hai hành vi thì user không tin được.
-      Cần chốt: kích thước phi lý thì luôn hỏi lại, và đưa luật đó vào cả prompt lẫn guard.</li>
-    <li><b>3 · Đưa cho 5 người thật dùng và đo lại.</b>
-      Cả bộ đo hiện tại là nhóm tự chấm nhóm. Chưa có một người ngoài nào chạm vào prototype.</li>
+    <li><b>1 · Export ra SketchUp / Revit / 3ds Max.</b>
+      <b>3/5</b> người thử chặn “dùng thật” đúng ở đây (P1 Lan, P2 Hùng, P5 Đức). Bảng thông số đủ để tin —
+      chưa đủ để mang vào workflow đồ án.</li>
+    <li><b>2 · Guard ngữ nghĩa cho mọi tham số + ổn định L4-02.</b>
+      Cách sửa “tường nam” mới áp cho <code>side</code> — phải áp cho <code>room_id</code>/<code>width_m</code>.
+      Kích thước phi lý (L4-02) lúc apply-rồi-chặn, lúc tự hỏi lại → user không tin được.</li>
+    <li><b>3 · Làm mềm copy no_evidence / out_of_scope + hiện phép đổi đơn vị.</b>
+      P3 tưởng app lỗi khi gõ “phòng bếp”. P5 gõ <code>1200mm</code> ra 1,2 m im re — muốn thấy dòng quy đổi.</li>
   </ul>
   <div class="c" style="margin-top:auto;border-color:#f0883e">
     <div class="tag">Bài học lớn nhất</div>
@@ -197,7 +212,7 @@
       Nếu build trước rồi khảo sát sau, nhóm đã build đúng sản phẩm cho sai người.
     </div>
   </div>
-  <div class="foot">Draft2Life · D304 — Nguyễn Minh Công (2A202601945) · Nguyễn Văn Sáng (01252) · Diệp Đức Lai (01784)</div>
+  <div class="foot">Draft2Life · D304 — Nguyễn Minh Công (2A202601945) · Nguyễn Văn Sáng (2A202601252) · Diệp Đức Lai (2A202601784)</div>
 </section>
 
 </body>

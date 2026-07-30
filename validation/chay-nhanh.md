@@ -1,6 +1,10 @@
 # Chạy vòng validation trong 50 phút
 
-8 điểm R6. Cần đúng **5 người ngoài nhóm × 10 phút**. Không cần chuẩn bị gì thêm — mọi thứ đã sẵn.
+> **ĐÃ CHẠY XONG** — 5/5 phiên Ngày 2 · 09:15–10:25. Log: `feedback-log.md` · danh sách: `willing-users.md`.
+> File này giữ lại làm protocol (để giải thích cách nhóm chạy), không phải việc còn mở.
+
+8 điểm R6. Cần **ít nhất 5 người ngoài nhóm × khoảng 10 phút**; trong đó có ít nhất
+**2 willing user từ CP1**.
 
 ## Đường nhanh nhất: đổi chéo trong zone
 
@@ -53,15 +57,16 @@ Chỗ họ kẹt chính là dữ liệu. Người log ghi:
 > Nếu cả 5 người đều khen thì phiên test hỏng. Giao task khó hơn:
 > *"Giờ thử bảo nó tính giúp bạn chi phí sửa"* hoặc *"thử thêm cửa vào phòng bếp"*.
 
-## Sau mỗi phiên — điền ngay 1 dòng
+## Sau mỗi phiên — điền ngay 1 biên bản
 
 Vào `validation/feedback-log.md`, đừng để dồn cuối buổi rồi nhớ nhầm.
 
-`người thử (tên/vai — willing user?) | task | quan sát | quote nguyên văn | mức nghiêm trọng`
+Mỗi biên bản đã có sẵn trường cho tên/vai, nguồn willing user, câu đã gõ, thời gian ra kết quả,
+quan sát, ba quote nguyên văn và mức nghiêm trọng.
 
 ## Sau khi xong 5 phiên (10 phút)
 
-1. Điền 4 dòng tổng hợp cuối `feedback-log.md`.
+1. Điền bảng chủ đề lặp, kiểm tra giả thuyết và bảng quyết định cuối `feedback-log.md`.
 2. Đối chiếu **ngưỡng đã đặt trước**: ≥3/5 người phàn nàn bị hỏi lại quá nhiều → xem lại ranh giới
    conditional trong `spec.md` §4. Đây là ngưỡng ghi trước khi test, không được sửa sau khi nghe feedback.
 3. Chọn **1-2 thay đổi** làm trước demo → chép sang `spec.md` §9 Changelog.
@@ -78,4 +83,6 @@ Vào `validation/feedback-log.md`, đừng để dồn cuối buổi rồi nhớ
 | Log nguyên văn, bấm giờ | Diệp Đức Lai |
 | Trực máy, xử lý nếu prototype lỗi | Nguyễn Minh Công |
 
-Ba người chạy song song 2 phiên một lúc thì xong trong 25 phút.
+Với đúng bộ ba vai trên, chạy tuần tự 5 phiên mất khoảng 50 phút. Chỉ chạy hai phiên song song
+khi có thêm một điều phối viên và một người log độc lập cho phiên thứ hai; không để một người vừa
+điều phối vừa ghi hai phiên.

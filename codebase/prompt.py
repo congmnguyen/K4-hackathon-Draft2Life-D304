@@ -67,6 +67,8 @@ width_m là con số mét đầu tiên chỉ chiều rộng trong câu, dù vi�
 - "2m5" → 2.5
 - "0.9m" / "0,9 m" / "0.9 mét" → 0.9
 - "1.2m" / "1,2 m" → 1.2
+- Đơn vị milimét (thói quen AutoCAD): "1200mm" → 1.2 · "800 mm" → 0.8 · "900mm" → 0.9
+  (chia cho 1000). Luôn quy về mét trong width_m.
 - "rộng 1m2", "cửa sổ 1m5", "cửa đi 1m", "WINDOW 1.2m" → đều có kích thước
 Chỉ để width_m = null khi trong câu THỰC SỰ không có con số kích thước nào, hoặc
 kích thước chỉ được mô tả tương đối ("to hơn chút", "khoảng chừng hơn một mét",

@@ -8,6 +8,7 @@
 {"id":"N08","lop":"thuong","plan":"A","input":"thêm cửa sổ ở tường phía đông phòng ngủ","expect_route":"clarify","expect_missing":"width_m","ghi_chu":"Chỉ còn thiếu kích thước — đây là case dễ sai nhất, model hay tự điền mặc định."}
 {"id":"N09","lop":"thuong","plan":"B","input":"sửa lại chỗ này cho đẹp hơn","expect_route":"clarify","expect_missing":"element","ghi_chu":"Mơ hồ hoàn toàn."}
 {"id":"N10","lop":"thuong","plan":"A","input":"tôi muốn thay đổi một chút ở phòng khách","expect_route":"clarify","expect_missing":"element","ghi_chu":"Có phòng nhưng không biết sửa gì."}
+{"id":"N11","lop":"thuong","plan":"A","input":"Thêm cửa sổ 1200mm tường đông phòng khách","expect_route":"apply","expect_target":{"element":"cua_so","room_id":"khach","side":"E","width_m":1.2},"ghi_chu":"Đơn vị mm theo thói quen AutoCAD. Case lấy từ quan sát thật — phiên validation P5 (Đức) gõ đúng câu này."}
 {"id":"L1-01","lop":"1_nguon_su_that","plan":"A","input":"mở rộng phòng bếp thêm 2m","expect_route":"no_evidence","ghi_chu":"Mặt bằng A không có bếp. Không được bịa phòng."}
 {"id":"L1-02","lop":"1_nguon_su_that","plan":"A","input":"thêm cửa sổ rộng 1m2 ở tường phía tây ban công","expect_route":"no_evidence","ghi_chu":"Đủ tham số NHƯNG ban công không tồn tại — bẫy: đủ tham số vẫn phải chặn."}
 {"id":"L1-03","lop":"1_nguon_su_that","plan":"B","input":"thêm cửa đi 0.9m ở tường bắc phòng ngủ","expect_route":"no_evidence","ghi_chu":"Phòng ngủ có ở mặt bằng A nhưng KHÔNG có ở B. Kiểm model đọc đúng plan đang mở."}

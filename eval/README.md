@@ -2,12 +2,13 @@
 
 | File | Nội dung |
 |---|---|
-| `golden-set.jsonl` | 30 case nhóm tự xây |
+| `golden-set.jsonl` | 31 case nhóm tự xây |
 | `quality-bar.md` | 3 chiều chất lượng + bar đã chốt |
 | `run-01.md` | Lượt 1 — **24/30 = 80,0%** ❌ dưới bar |
 | `run-02.md` | Lượt 2 — **27/30 = 90,0%** ✅ vượt bar |
 | `run-03.md` | Lượt 3 — 27/30 = 90,0% nhưng **D2 = 29/30 → ❌ trượt điều kiện cứng** |
-| `run-04.md` | Lượt 4 — **29/30 = 96,7%**, D2 = 30/30 ✅ **vượt bar, cả 2 điều kiện cứng đạt** |
+| `run-04.md` | Lượt 4 — 29/30 = 96,7%, D2 = 30/30 ✅ vượt bar |
+| `run-05.md` | Lượt 5 — **31/31 = 100,0%**, D2 = 31/31 ✅ **không còn case fail** |
 
 Chạy lại: `export OPENAI_API_KEY=... && python3 scripts/run_eval.py --out eval/run-03.md`
 Bộ đo gọi đúng `codebase/decide.py` mà bản demo dùng — không có đường code riêng cho eval.
@@ -16,15 +17,15 @@ Bộ đo gọi đúng `codebase/decide.py` mà bản demo dùng — không có �
 
 | Nhóm | Số case | Yêu cầu đề bài |
 |---|---|---|
-| Case thường | 10 | 8-10 ✅ |
+| Case thường | 11 | 8-10 (+1 sau validation) |
 | ① Nguồn sự thật | 4 | ≥2 ✅ |
 | ② Mơ hồ / thiếu thông tin | 4 | ≥2 ✅ |
 | ③ Ngoài phạm vi / thẩm quyền | 4 | ≥2 ✅ |
 | ④ Đặc thù domain | 4 | ≥2 ✅ |
 | Case hiếm | 4 | 2-4 ✅ |
-| **Tổng** | **30** | ≥20 ✅ |
+| **Tổng** | **31** | ≥20 ✅ |
 
-Case bắt nguồn từ quan sát thực tế: **18/30** — cách người dùng thật viết kích thước
+Case bắt nguồn từ quan sát thực tế: **19/31** — cách người dùng thật viết kích thước
 ("1m2", "1m5", "0.9m"), tên phòng nhiều chữ, câu có từ lịch sự thừa, gõ tiếng Anh xen
 tiếng Việt, và 4 câu hỏi ngoài thẩm quyền lấy từ nội dung phỏng vấn offline. 12 case
 còn lại là case hiểm nhóm tự dựng để ép 4 lớp chỗ khó.
@@ -71,6 +72,21 @@ không tồn tại chính là nội dung câu trả lời.
 
 Kết quả: **29/30 = 96,7%**, D2 = 30/30, không case `apply` nào lọt guard với tham số phi lý.
 Độ phủ: thường 10/10 · ① 4/4 · ② 4/4 · ③ 4/4 · ④ 3/4 · hiếm 4/4.
+
+## Lượt 5 — lỗi do vòng validation lộ ra
+
+Sau khi user thử, nhóm thêm gợi ý format kích thước vào ô nhập, hứa `1200mm` = 1,2 m. Kiểm lại bằng lời
+gọi AI thật: câu `"Thêm cửa sổ 1200mm tường đông phòng khách"` ra `clarify` rồi bị guard chặn — model rút
+đúng `width_m = 1.2` nhưng không dám apply vì prompt không hề nói gì về đơn vị mm.
+**Giao diện hứa thứ hệ thống chưa làm được.**
+
+| Sửa | Ở đâu |
+|---|---|
+| Thêm luật đọc đơn vị mm ("1200mm" → 1.2, chia 1000, luôn quy về mét) | `prompt.py` |
+| Đưa đúng câu người thử đã gõ vào golden set thành case **N11** | `golden-set.jsonl` |
+
+Kết quả: **31/31 = 100,0%**, D2 = 31/31, không còn case fail.
+Case L4-02 (cửa sổ 12 m) từng dao động giữa các lượt — lượt 5 model apply và guard chặn đúng thiết kế.
 
 ## Case còn fail ở lượt 4
 

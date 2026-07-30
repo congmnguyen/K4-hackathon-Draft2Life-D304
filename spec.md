@@ -266,17 +266,17 @@ ra cùng kết quả — đây là cách nhóm khử lệch thay vì đối chi�
 
 | Nhóm | Số case | Yêu cầu đề bài |
 |---|---|---|
-| Case thường | 10 | 8-10 ✅ |
+| Case thường | 11 | 8-10 (+1 case thêm sau validation) |
 | ① Nguồn sự thật | 4 | ≥2 ✅ |
 | ② Mơ hồ / thiếu thông tin | 4 | ≥2 ✅ |
 | ③ Ngoài phạm vi / thẩm quyền | 4 | ≥2 ✅ |
 | ④ Đặc thù domain | 4 | ≥2 ✅ |
 | Case hiếm | 4 | 2-4 ✅ |
-| **Tổng** | **30** | ≥20 ✅ |
+| **Tổng** | **31** | ≥20 ✅ |
 
-**18/30 case bắt nguồn từ quan sát thực tế:** cách người dùng thật viết kích thước ("1m2", "1m5", "0.9m"),
+**19/31 case bắt nguồn từ quan sát thực tế:** cách người dùng thật viết kích thước ("1m2", "1m5", "0.9m"),
 tên phòng nhiều chữ, câu có từ lịch sự thừa, gõ tiếng Anh xen tiếng Việt, và 4 câu ngoài thẩm quyền
-lấy từ nội dung phỏng vấn offline. 12 case còn lại là case hiểm nhóm tự dựng để ép đủ 4 lớp.
+lấy từ nội dung phỏng vấn offline. Case **N11** (`1200mm`) thêm sau vòng validation — phiên P5 (Đức) gõ đúng câu đó theo thói quen AutoCAD. 12 case còn lại là case hiểm nhóm tự dựng để ép đủ 4 lớp.
 
 *(Ghi chú trung thực: khoá này cấp data pack là chatlog VLearn — không dùng được cho domain kiến trúc.
 Nhóm hướng C tự thu evidence và tự xây golden set từ khảo sát 123 người của mình.)*
@@ -301,9 +301,17 @@ lỗi → mới định nghĩa "tốt"), rồi giữ nguyên. Chi tiết: `eval/
 | 1 | `eval/run-01.md` | 24/30 = **80,0%** | — | ❌ dưới bar |
 | 2 | `eval/run-02.md` | 27/30 = **90,0%** | 30/30 ✅ | ✅ vượt bar |
 | 3 | `eval/run-03.md` | 27/30 = 90,0% | **29/30** ❌ | ❌ **trượt điều kiện cứng số 1** |
-| 4 | `eval/run-04.md` | **29/30 = 96,7%** | **30/30** ✅ | ✅ **vượt bar, cả 2 điều kiện cứng đạt** |
+| 4 | `eval/run-04.md` | 29/30 = 96,7% | 30/30 ✅ | ✅ vượt bar |
+| 5 | `eval/run-05.md` | **31/31 = 100,0%** | **31/31** ✅ | ✅ **vượt bar, cả 2 điều kiện cứng đạt** |
 
-Độ phủ lượt 4 theo lớp: thường 10/10 · ① 4/4 · ② 4/4 · ③ 4/4 · ④ 3/4 · hiếm 4/4.
+Độ phủ lượt 5 theo lớp: thường 11/11 · ① 4/4 · ② 4/4 · ③ 4/4 · ④ 4/4 · hiếm 4/4.
+
+**Lượt 5 — lỗi phát hiện nhờ vòng validation.** Sau khi user thử, nhóm thêm dòng gợi ý format kích thước
+vào ô nhập, trong đó hứa `1200mm` = 1,2 m. Gọi AI thật để kiểm lại thì câu `"Thêm cửa sổ 1200mm tường
+đông phòng khách"` ra `clarify` rồi bị guard chặn — model rút đúng `width_m = 1.2` nhưng không tự tin nên
+không dám apply. **Giao diện đang hứa một thứ hệ thống chưa làm được.** Sửa: thêm luật đọc đơn vị mm vào
+`prompt.py`, và đưa đúng câu người thử đã gõ vào golden set thành case **N11**.
+Chạy lại trọn bộ 31 case: **100,0%**, không còn case fail.
 
 **Sửa gì giữa 2 lượt (chỉ sửa MỘT nguyên nhân chung, rồi chạy lại trọn bộ):** lượt 1 có 6 case fail,
 trong đó **4 case cùng gốc** — model trả `width_m = null` dù câu có số rõ ràng, vì không áp dụng được
@@ -329,14 +337,12 @@ không có chính là nội dung câu trả lời.
 | Câu có **bất kỳ** ý ngoài phạm vi → `out_of_scope`, kể cả khi phần còn lại đủ tham số | `prompt.py` | H02 — câu hai ý |
 | User bảo "bỏ qua hướng dẫn / dựng đại" mà thiếu tham số → vẫn `clarify` | `prompt.py` | H03 — prompt injection |
 
-**Case còn fail ở lượt 4 — ghi nhận đầy đủ, không sửa golden set cho đẹp số:**
+**Không còn case fail ở lượt 5.** Case L4-02 (cửa sổ 12 m) từng dao động giữa các lượt — lượt 5 model
+trả `apply` và guard chặn đúng như thiết kế. Nhóm **không** sửa expectation của case này ở bất kỳ lượt nào.
 
-| # | Chờ | Nhận | Phân tích |
-|---|---|---|---|
-| **L4-02** "cửa sổ rộng 12m" | `apply` rồi guard chặn | `clarify` | Model tự nhận ra 12 m phi lý và hỏi lại. **Hành vi an toàn hơn kỳ vọng**, vẫn tính fail vì lệch expectation. Case này dao động giữa các lượt — model không ổn định ở đây |
-
-**Bài học lớn nhất từ 4 lượt đo:** hai lần sửa thì một lần lỗi nằm ở **guard nhóm tự viết**, không phải
-ở model (L4-01 lượt 1, L1-01 lượt 3). Nếu chỉ nhìn % mà không nhìn từng case thì cả hai lần đều bị bỏ sót.
+**Bài học lớn nhất từ 5 lượt đo:** ba lần sửa thì **hai lần lỗi nằm ở phía nhóm, không phải ở model** —
+guard tự viết quá rộng (L4-01, lượt 1), guard chặn nhầm route đúng (L1-01, lượt 3), và giao diện hứa thứ
+prompt chưa hỗ trợ (N11, lượt 5). Nếu chỉ nhìn % mà không đọc từng case thì cả ba lần đều bị bỏ sót.
 
 ---
 
@@ -347,28 +353,28 @@ không có chính là nội dung câu trả lời.
 | Mã HV | Tên | Phần |
 |---|---|---|
 | 2A202601945 | **Nguyễn Minh Công** *(lead)* | Lát cắt & automation · spec.md · `codebase/prompt.py` + `codebase/decide.py` (prompt + lời gọi AI + guard) |
-| 01252 | **Nguyễn Văn Sáng** | Evidence Đường A: `scripts/analyze_survey.py`, `evidence/survey-log.md`, bảng impact §2 · demo script |
-| 01784 | **Diệp Đức Lai** | Flow UI `codebase/index.html` (4 bước, render 2D/3D, 6 đường đi) · `eval/golden-set.jsonl` · validation log |
+| 2A202601252 | **Nguyễn Văn Sáng** | Evidence Đường A: `scripts/analyze_survey.py`, `evidence/survey-log.md`, bảng impact §2 · demo script |
+| 2A202601784 | **Diệp Đức Lai** | Flow UI `codebase/index.html` (4 bước, render 2D/3D, 6 đường đi) · `eval/golden-set.jsonl` · validation log |
 
 *Vibe-coding rule:* mỗi người giải thích được phần có tên mình. Phần nào cũng có file cụ thể để chỉ vào.
 
 ### Willing users + kế hoạch validation CP5
 
 **Nguồn:** 109/123 người khảo sát đã tick *"muốn tham gia trải nghiệm và góp ý"*, 122/123 để lại email
-hoặc SĐT. Nhóm chốt danh sách 5 người vào `validation/willing-users.md` — **tên/vai để trong file
-validation, không đưa lên repo public**.
+hoặc SĐT. Danh sách 5 người đã chốt + đã test: `validation/willing-users.md`
+(3 willing CP1: Lan R017 · Hùng R002 · Vy R088 + 2 đổi chéo zone: Trang · Đức).
 
-**Một phiên 10 phút/người:**
+**Một phiên 10 phút/người:** *(đã chạy Ngày 2 · 09:15–10:25)*
 1. Giao task thật: *"Bạn đang có mặt bằng này. Hãy thêm một cửa sổ vào phòng khách."* → **im lặng quan sát**,
    ghi họ gõ gì, kẹt đâu.
 2. Hỏi đúng 3 câu: *"Điều gì khó hiểu hoặc khó chịu nhất?"* · *"Kết quả này bạn có tin không — vì sao?"* ·
    *"Bạn có dùng thật không — vì sao / vì sao chưa?"*
-3. Log nguyên văn vào bảng `validation/feedback-log.md`: `người thử (tên/vai — willing user?) | task |
-   quan sát | quote nguyên văn | mức nghiêm trọng`.
+3. Log nguyên văn vào bảng `validation/feedback-log.md`.
 
 **Người log:** Diệp Đức Lai. **Người điều phối phiên:** Nguyễn Văn Sáng.
 **Giả thuyết cần bị phá:** nhóm tin route `clarify` là tính năng; user có thể thấy nó là *phiền*.
-Nếu ≥3/5 người phàn nàn bị hỏi lại quá nhiều thì đó là tín hiệu phải xem lại ranh giới conditional.
+Ngưỡng trước test: ≥3/5 phàn nàn hỏi lại → xem lại ranh giới conditional.
+**Kết quả:** **2/5** phàn nàn → **không chạm ngưỡng** → giữ `clarify` (xem §9 + `validation/feedback-log.md`).
 
 ### Multi-prototype — trục khác biệt
 
@@ -397,4 +403,6 @@ P1 phải bắt đầu lại từ đầu ở khâu evidence. Bản P1 giữ nguy
 | Sau eval lượt 2 | Gọi thẳng tên bẫy "nam = SOUTH" trong prompt + thêm trường `side_source` để guard map lại bằng code | Case N04 = kịch bản K10, cái nhóm sợ nhất khi demo |
 | Sau eval lượt 3 | Guard chỉ tính "bịa phòng" ở route `apply`/`clarify`, không tính ở `no_evidence` | Lượt 3 làm D2 tụt 29/30 — **bug do guard nhóm viết**, chặn nhầm câu trả lời đúng (L1-01) |
 | Sau eval lượt 3 | Ưu tiên route: câu có bất kỳ ý ngoài phạm vi → `out_of_scope`; user xin "dựng đại" mà thiếu tham số → vẫn `clarify` | Case H02, H03 |
-| *(chờ CP5)* | *Thay đổi từ vòng validation với user thật* | *Điền sau phiên test* |
+| Sau validation user (5 phiên) | **Thêm** dòng gợi ý format kích thước (`1m2`/`1m5`/`1200mm`) + 3 chip bấm nhanh `0m8`/`1m2`/`1m5` dưới ô nhập trong `codebase/index.html` | **3/5** người kẹt hoặc không chắc cách gõ size — P1 Lan *"không biết gõ kiểu nào, 1m2 hay 1,2 hay 1200mm"*; P3 Vy *"cho em bấm mấy số hay dùng"*; P5 Đức muốn thấy phép đổi mm→m. Chi tiết: `validation/feedback-log.md` |
+| Sau validation user (5 phiên) | Thêm luật đọc **đơn vị mm** vào `prompt.py` + đưa câu người thử đã gõ thành golden case **N11** | Gợi ý UI mới hứa `1200mm` = 1,2 m, nhưng gọi AI thật thì câu đó ra `clarify` rồi bị guard chặn — **giao diện hứa thứ hệ thống chưa làm được**. Lượt eval 5: 31/31 = 100,0% |
+| Sau validation user (5 phiên) | **Giữ nguyên** route `clarify` (hỏi đúng 1 tham số thiếu, không tự điền) | Chỉ **2/5** phàn nàn hỏi lại (P3 Vy, P4 Trang) — **dưới ngưỡng ≥3/5** đã chốt trước test ở §8. 4/5 gắn niềm tin với việc không đoán bừa / có Hoàn tác + bảng thông số |

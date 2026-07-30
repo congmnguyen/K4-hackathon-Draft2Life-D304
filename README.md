@@ -9,8 +9,8 @@
 | Mã HV | Tên | Phụ trách |
 |---|---|---|
 | 2A202601945 | **Nguyễn Minh Công** *(lead)* | Lát cắt & automation · `spec.md` · prompt + lời gọi AI thật trong `codebase/` (CP3) |
-| 01252 | **Nguyễn Văn Sáng** | Evidence Đường A (`scripts/analyze_survey.py`, `evidence/`) · bảng impact · log phỏng vấn |
-| 01784 | **Diệp Đức Lai** | Flow UI `codebase/index.html` · golden set `eval/` · validation log `validation/` |
+| 2A202601252 | **Nguyễn Văn Sáng** | Evidence Đường A (`scripts/analyze_survey.py`, `evidence/`) · bảng impact · log phỏng vấn |
+| 2A202601784 | **Diệp Đức Lai** | Flow UI `codebase/index.html` · golden set `eval/` · validation log `validation/` |
 
 ## Trạng thái theo rubric 75 điểm
 
@@ -22,9 +22,9 @@
 | R1 · Bằng chứng & impact | 15 | `spec.md` §1-§2 + `evidence/survey-log.md` (log nguyên văn 123 người) | ✅ |
 | R2 · Lát cắt & thiết kế | 15 | `spec.md` §4 + §4b (6 nguyên tắc HAX/PAIR) | ✅ |
 | R3 · Chỗ khó & kịch bản | 11 | `spec.md` §5 (10 kịch bản) + §6 (6 đường đi) | ✅ |
-| R4 · Kiểm thử | 15 | `spec.md` §7 + `eval/` | ✅ 30 case, 4 lượt: 80,0% → **96,7%** vs bar 85% |
+| R4 · Kiểm thử | 15 | `spec.md` §7 + `eval/` | ✅ 31 case, 5 lượt: 80,0% → **100,0%** vs bar 85% |
 | R5 · Prototype chạy được | 8 | `codebase/` | ✅ Mock + **AI thật** ở quyết định trung tâm, trace trong repo |
-| R6 · Validation với user | 8 | `validation/` | ⬜ **việc còn lại — khung sẵn, cần 5 người thật ngồi thử** |
+| R6 · Validation với user | 8 | `validation/` | ✅ **5/5 phiên** · 3 willing CP1 + 2 zone · 1 thay đổi UI + giữ clarify có lý do |
 
 **Ngoài rubric:** `demo-slides.pdf` (6 trang, nguồn `demo/slides.html`) · `reflection/` 3 file khung, mỗi người tự viết lại.
 | R7 · Quy trình & repo | 3 | cấu trúc repo + README này | ✅ |

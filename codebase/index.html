@@ -49,6 +49,12 @@
   .chips{display:flex;flex-direction:column;gap:8px;margin-top:12px}
   .chip{text-align:left;font-size:13px;color:var(--mut);padding:9px 12px}
   .chip b{color:var(--ink);font-weight:500}
+  .fmt-hint{font-size:12px;color:var(--mut);margin:8px 0 0;line-height:1.55}
+  .fmt-hint code{background:#0b0f14;border:1px solid var(--line);border-radius:4px;
+                 padding:1px 5px;color:var(--ink);font-size:11px}
+  .size-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+  .size-chips button{font-size:12px;padding:6px 10px;color:var(--mut)}
+  .size-chips button:hover{color:var(--ink)}
   .verdict{border-left:3px solid var(--mut);padding:14px 16px;border-radius:0 8px 8px 0;
            background:var(--panel);margin-bottom:14px}
   .verdict .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
@@ -122,6 +128,14 @@
       <div class="box">
         <h4>Câu của bạn</h4>
         <textarea id="cmd" placeholder="ví dụ: thêm một cửa sổ rộng 1m2 ở tường phía tây phòng khách"></textarea>
+        <p class="fmt-hint">Cần gợi ý: <b>loại</b> · <b>phòng</b> · <b>hướng tường</b> · <b>kích thước</b>.
+          Format size: <code>1m2</code> = 1,2 m · <code>1m5</code> = 1,5 m · <code>1200mm</code> = 1,2 m.
+          <i>(Thêm sau validation — 3/5 người kẹt ở cách gõ kích thước.)</i></p>
+        <div class="size-chips" id="sizeChips">
+          <button type="button" onclick="insertSize('0m8')">+ rộng 0m8</button>
+          <button type="button" onclick="insertSize('1m2')">+ rộng 1m2</button>
+          <button type="button" onclick="insertSize('1m5')">+ rộng 1m5</button>
+        </div>
         <div class="row"><button class="primary" onclick="decide()">Dựng thử →</button>
           <button onclick="go(2)">← Quay lại</button></div>
       </div>
@@ -176,6 +190,21 @@ const SAMPLES = [
 ];
 
 let plan = null, added = [], history = [];
+
+/** Chèn gợi ý kích thước vào ô nhập — thay đổi từ validation user (P1/P3/P5). */
+function insertSize(token){
+  const el = document.getElementById('cmd');
+  const snip = ' rộng ' + token;
+  const v = el.value || '';
+  if (/\brộng\s+[\d.,m]+/i.test(v) || /\b\d+m\d?\b/i.test(v) || /\b\d+\s*mm\b/i.test(v)) {
+    el.value = v.replace(/\brộng\s+[\d.,m]+/i, 'rộng ' + token)
+                .replace(/\b\d+m\d?\b/i, token)
+                .replace(/\b\d+\s*mm\b/i, token);
+  } else {
+    el.value = (v.trim() + snip).trim();
+  }
+  el.focus();
+}
 
 function go(n){
   for (let i=1;i<=4;i++){
