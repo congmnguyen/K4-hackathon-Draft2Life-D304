@@ -12,15 +12,20 @@
 | 01252 | **Nguyễn Văn Sáng** | Evidence Đường A (`scripts/analyze_survey.py`, `evidence/`) · bảng impact · log phỏng vấn |
 | 01784 | **Diệp Đức Lai** | Flow UI `codebase/index.html` · golden set `eval/` · validation log `validation/` |
 
-## Trạng thái mốc
+## Trạng thái theo rubric 75 điểm
 
-| Mốc | Artifact | Xong? |
-|---|---|---|
-| CP1 · Canvas | `checkpoints/cp1-canvas.md` · `evidence/survey-results.json` | ✅ |
-| CP2 · Bấm được | `codebase/index.html` (Mock, 4 đường đi) · `codebase/README.md` | ✅ |
-| CP3 · AI thật + đo lượt đầu | `codebase/` + `eval/` | ⬜ |
-| CP4 · `spec.md` (hạn cứng 23:59 N1) | `spec.md` | ⬜ |
-| CP5 · Validation + dry run | `validation/` · `demo-slides.pdf` | ⬜ |
+> Bài nộp checkpoint đi qua link riêng của ban tổ chức, **không nằm trong repo**.
+> Repo này chỉ chứa artifact của 75 điểm chấm bài.
+
+| Khối rubric | Điểm | File trong repo | Xong? |
+|---|---|---|---|
+| R1 · Bằng chứng & impact | 15 | `spec.md` §1-§2 + `evidence/` + `scripts/analyze_survey.py` | 🟡 evidence xong, spec chưa |
+| R2 · Lát cắt & thiết kế | 15 | `spec.md` §4 | ⬜ |
+| R3 · Chỗ khó & kịch bản | 11 | `spec.md` §5-§6 | ⬜ |
+| R4 · Kiểm thử | 15 | `spec.md` §7 + `eval/` | ⬜ |
+| R5 · Prototype chạy được | 8 | `codebase/` | 🟡 Mock bấm được, AI thật vào ở CP3 |
+| R6 · Validation với user | 8 | `validation/` | ⬜ |
+| R7 · Quy trình & repo | 3 | cấu trúc repo + README này | ✅ |
 
 ## Bằng chứng — Đường A (khảo sát), n = 123 người ngoài nhóm
 
