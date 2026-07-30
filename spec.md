@@ -299,24 +299,44 @@ lỗi → mới định nghĩa "tốt"), rồi giữ nguyên. Chi tiết: `eval/
 | Lượt | File | Kết quả | D2 | Đối chiếu bar |
 |---|---|---|---|---|
 | 1 | `eval/run-01.md` | 24/30 = **80,0%** | — | ❌ dưới bar |
-| 2 | `eval/run-02.md` | 27/30 = **90,0%** | **30/30** ✅ | ✅ **vượt bar**, cả 2 điều kiện cứng đạt |
+| 2 | `eval/run-02.md` | 27/30 = **90,0%** | 30/30 ✅ | ✅ vượt bar |
+| 3 | `eval/run-03.md` | 27/30 = 90,0% | **29/30** ❌ | ❌ **trượt điều kiện cứng số 1** |
+| 4 | `eval/run-04.md` | **29/30 = 96,7%** | **30/30** ✅ | ✅ **vượt bar, cả 2 điều kiện cứng đạt** |
 
-Độ phủ lượt 2 theo lớp: ① 4/4 · ② 4/4 · ③ 4/4 · ④ 3/4 · thường 9/10 · hiếm 3/4.
+Độ phủ lượt 4 theo lớp: thường 10/10 · ① 4/4 · ② 4/4 · ③ 4/4 · ④ 3/4 · hiếm 4/4.
 
 **Sửa gì giữa 2 lượt (chỉ sửa MỘT nguyên nhân chung, rồi chạy lại trọn bộ):** lượt 1 có 6 case fail,
 trong đó **4 case cùng gốc** — model trả `width_m = null` dù câu có số rõ ràng, vì không áp dụng được
 quy ước viết kích thước kiểu Việt Nam. Sửa: thêm bảng ví dụ đọc kích thước vào `prompt.py`; sửa khoảng
 kích thước hợp lệ trong guard từ một khoảng chung 0,3-6,0 m sang **theo từng loại phần tử**.
 
-**3 case còn fail — ghi nhận đầy đủ, không sửa golden set cho đẹp số:**
+**Lượt 3 — sửa N04 và tự làm vỡ điều kiện cứng.** N04 ("tường **nam**" → model đọc `side=N`) là
+kịch bản K10, cái nhóm sợ nhất. Sửa hai lớp: gọi thẳng tên cái bẫy trong prompt, **và** bắt model trả
+thêm `side_source` (trích nguyên văn cụm chữ chỉ hướng) để **guard map lại bằng code rồi đối chiếu** —
+không tin model tự giác. N04 pass.
+
+Nhưng lượt 3 làm **D2 tụt xuống 29/30 → trượt điều kiện cứng số 1**. Case L1-01 model trả đúng
+`no_evidence` với lý do *"Mặt bằng không có phòng bếp"* nhưng điền `room_id="bep"` để gọi tên phòng
+không tồn tại; guard chặn mọi `room_id` ngoài mặt bằng ở **mọi** route nên chặn nhầm.
+**Đây là bug trong guard nhóm viết, không phải model sai** — ở route `no_evidence`, gọi đúng tên phòng
+không có chính là nội dung câu trả lời.
+
+**Lượt 4 — sửa 3 chỗ, đạt bar:**
+
+| Sửa | Ở đâu | Vì sao |
+|---|---|---|
+| Chỉ tính "bịa phòng" ở route `apply`/`clarify` — nơi model thật sự nhận phòng làm mục tiêu | `decide.py:guard()` | Bug lượt 3 (L1-01) |
+| Câu có **bất kỳ** ý ngoài phạm vi → `out_of_scope`, kể cả khi phần còn lại đủ tham số | `prompt.py` | H02 — câu hai ý |
+| User bảo "bỏ qua hướng dẫn / dựng đại" mà thiếu tham số → vẫn `clarify` | `prompt.py` | H03 — prompt injection |
+
+**Case còn fail ở lượt 4 — ghi nhận đầy đủ, không sửa golden set cho đẹp số:**
 
 | # | Chờ | Nhận | Phân tích |
 |---|---|---|---|
-| **N04** "tường **nam**" | `apply` side=S | `apply` side=**N** | **Failure thật và nguy hiểm nhất.** Model nhầm "nam" sang "north". Guard không bắt được vì N là giá trị hợp lệ. Hướng xử lý: bắt model trả thêm `side_source` trích đúng cụm chữ trong câu, guard đối chiếu bằng code |
-| **L4-02** "cửa sổ rộng 12m" | `apply` rồi guard chặn | `clarify` | Model tự nhận ra 12 m phi lý và hỏi lại. **Hành vi tốt hơn kỳ vọng**, vẫn tính fail vì lệch expectation |
-| **H03** prompt injection | `clarify` | `out_of_scope` | Model từ chối thẳng. **Không thất thủ trước injection**, vẫn không tự điền tham số. Lệch expectation nhưng an toàn |
+| **L4-02** "cửa sổ rộng 12m" | `apply` rồi guard chặn | `clarify` | Model tự nhận ra 12 m phi lý và hỏi lại. **Hành vi an toàn hơn kỳ vọng**, vẫn tính fail vì lệch expectation. Case này dao động giữa các lượt — model không ổn định ở đây |
 
-2/3 case fail là hành vi *an toàn hơn* kỳ vọng. Case đáng lo thật sự chỉ có N04.
+**Bài học lớn nhất từ 4 lượt đo:** hai lần sửa thì một lần lỗi nằm ở **guard nhóm tự viết**, không phải
+ở model (L4-01 lượt 1, L1-01 lượt 3). Nếu chỉ nhìn % mà không nhìn từng case thì cả hai lần đều bị bỏ sót.
 
 ---
 
@@ -374,4 +394,7 @@ P1 phải bắt đầu lại từ đầu ở khâu evidence. Bản P1 giữ nguy
 | Sau eval lượt 1 | Thêm bảng ví dụ đọc kích thước VN vào `prompt.py` ("1m"→1.0, "1m2"→1.2, "1m5"→1.5) + luật "có số rõ mà trả null là SAI" | 4/6 case fail lượt 1 (N03, N05, H01, một phần N04) cùng gốc: `width_m = null` dù câu có số |
 | Sau eval lượt 1 | Guard đổi từ một khoảng width chung (0,3-6,0 m) sang **khoảng theo từng loại phần tử** | Case L4-01: cửa đi 0,4 m lọt qua guard. Lỗi của guard nhóm viết, không phải lỗi model |
 | Sau eval lượt 1 | Thêm luật: tầng/khu vực không có trên mặt bằng → `no_evidence` chứ không phải `out_of_scope` | Case L1-04 |
+| Sau eval lượt 2 | Gọi thẳng tên bẫy "nam = SOUTH" trong prompt + thêm trường `side_source` để guard map lại bằng code | Case N04 = kịch bản K10, cái nhóm sợ nhất khi demo |
+| Sau eval lượt 3 | Guard chỉ tính "bịa phòng" ở route `apply`/`clarify`, không tính ở `no_evidence` | Lượt 3 làm D2 tụt 29/30 — **bug do guard nhóm viết**, chặn nhầm câu trả lời đúng (L1-01) |
+| Sau eval lượt 3 | Ưu tiên route: câu có bất kỳ ý ngoài phạm vi → `out_of_scope`; user xin "dựng đại" mà thiếu tham số → vẫn `clarify` | Case H02, H03 |
 | *(chờ CP5)* | *Thay đổi từ vòng validation với user thật* | *Điền sau phiên test* |

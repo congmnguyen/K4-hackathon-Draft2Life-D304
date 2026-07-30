@@ -22,7 +22,7 @@
 | R1 · Bằng chứng & impact | 15 | `spec.md` §1-§2 + `evidence/survey-log.md` (log nguyên văn 123 người) | ✅ |
 | R2 · Lát cắt & thiết kế | 15 | `spec.md` §4 + §4b (6 nguyên tắc HAX/PAIR) | ✅ |
 | R3 · Chỗ khó & kịch bản | 11 | `spec.md` §5 (10 kịch bản) + §6 (6 đường đi) | ✅ |
-| R4 · Kiểm thử | 15 | `spec.md` §7 + `eval/` | ✅ 30 case, 80,0% → **90,0%** vs bar 85% |
+| R4 · Kiểm thử | 15 | `spec.md` §7 + `eval/` | ✅ 30 case, 4 lượt: 80,0% → **96,7%** vs bar 85% |
 | R5 · Prototype chạy được | 8 | `codebase/` | ✅ Mock + **AI thật** ở quyết định trung tâm, trace trong repo |
 | R6 · Validation với user | 8 | `validation/` | ⬜ **việc còn lại — cần ≥5 người thật** |
 | R7 · Quy trình & repo | 3 | cấu trúc repo + README này | ✅ |

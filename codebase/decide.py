@@ -26,6 +26,15 @@ ROUTES = {"apply", "clarify", "no_evidence", "out_of_scope"}
 ELEMENTS = {"cua_so", "cua_di", "tuong"}
 SIDES = {"N", "E", "S", "W"}
 
+# Map từ chữ chỉ hướng sang mã. Thứ tự quan trọng: khớp cụm dài trước.
+SIDE_WORDS = {
+    "đông bắc": "N", "đông nam": "S", "tây bắc": "N", "tây nam": "S",
+    "bắc": "N", "north": "N",
+    "nam": "S", "south": "S",
+    "đông": "E", "east": "E",
+    "tây": "W", "west": "W",
+}
+
 # Khoảng kích thước hợp lệ theo từng loại phần tử (mét). Lấy theo thực tế thi công
 # dân dụng: cửa đi hẹp hơn 0,6m thì người không đi lọt; cửa sổ rộng quá 4m thì
 # không còn là cửa sổ. Guard chặn ở đây để số phi lý không lọt vào hồ sơ xuất ra.
@@ -82,8 +91,22 @@ def guard(result: dict[str, Any], plan: dict) -> list[str]:
 
     room_ids = {room["id"] for room in plan["rooms"]}
     room_id = target.get("room_id")
-    if room_id is not None and room_id not in room_ids:
+    # Chỉ tính là "bịa phòng" khi model đang nhận phòng đó là mục tiêu để dựng
+    # hoặc để hỏi tiếp. Ở route no_evidence, gọi tên đúng cái phòng KHÔNG tồn tại
+    # chính là nội dung câu trả lời — chặn ở đó là chặn nhầm.
+    if route in {"apply", "clarify"} and room_id is not None and room_id not in room_ids:
         violations.append(f"bịa phòng không có trên mặt bằng: {room_id!r}")
+
+    # Lớp ④: đối chiếu side với cụm chữ model tự trích. Model có thể đọc "nam"
+    # (south) thành N vì nhìn giống "north" — guard bắt bằng code, không tin model.
+    source = str(target.get("side_source") or "").lower()
+    if source and target.get("side") in SIDES:
+        derived = next((v for k, v in SIDE_WORDS.items() if k in source), None)
+        if derived and derived != target["side"]:
+            violations.append(
+                f"side {target['side']!r} không khớp cụm chữ {target['side_source']!r} "
+                f"(phải là {derived!r})"
+            )
 
     if route == "apply":
         element = target.get("element")
