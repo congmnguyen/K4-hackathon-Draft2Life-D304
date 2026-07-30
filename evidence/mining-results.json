@@ -1,0 +1,78 @@
+{
+  "source": "data/vlearn-pack/chatlog/chat_history_anonymized_for_hackathon.csv",
+  "rows": 2522,
+  "turns": 1261,
+  "tutor_answers": 1261,
+  "uncited_answers": 582,
+  "uncited_rate": 0.4615,
+  "substantive_uncited_rule": "citations=[] AND answer_length>=180 AND question_has_academic_keyword AND answer_is_not_refusal_or_redirect AND question_is_not_obvious_off_topic",
+  "substantive_uncited_answers": 129,
+  "substantive_uncited_rate": 0.1023,
+  "rating_sample_size": 70,
+  "rating_table": {
+    "uncited_down": 29,
+    "uncited_up": 12,
+    "cited_down": 8,
+    "cited_up": 21
+  },
+  "uncited_down_rate": 0.7073,
+  "cited_down_rate": 0.2759,
+  "downvote_odds_ratio_uncited_vs_cited": 6.344,
+  "examples": [
+    {
+      "turn_id": "T0020",
+      "question_excerpt": "(Trang 15, đoạn được chọn: \"instruction\") Giải thích đoạn bôi đen ở Trang 15.",
+      "answer_excerpt": "Trong kỹ thuật prompt (Prompt Engineering), \"instruction\" (chỉ dẫn) là một thành phần cốt lõi của một prompt. Nó đóng vai trò là yêu cầu trực tiếp hoặc hướng dẫn cụ thể mà bạn cung cấp cho mô hình ngôn ngữ (LLM) để định hình hành vi, xác đ…"
+    },
+    {
+      "turn_id": "T1261",
+      "question_excerpt": "(Trang 32, đoạn được chọn: \"token đối với nghĩa của mình Khóa nghĩa the\") giải thích kỹ cơ chế transformer",
+      "answer_excerpt": "Cơ chế Transformer hoạt động dựa trên các thành phần chính sau để xử lý dữ liệu (như token): 1. **Self-Attention (Cơ chế chú ý):** Đây là \"trái tim\" của Transformer. Nó cho phép mô hình đánh giá tầm quan trọng của các từ khác trong câu đối…"
+    },
+    {
+      "turn_id": "T0338",
+      "question_excerpt": "(Trang 4, đoạn được chọn: \"agent la gi\") agent la gi",
+      "answer_excerpt": "Trong ngữ cảnh của khóa học LLM, một **agent** (tác nhân) thường được hiểu là một hệ thống dựa trên mô hình ngôn ngữ lớn (LLM) có khả năng: 1. **Suy luận (Reasoning):** Sử dụng LLM để lập kế hoạch hoặc đưa ra quyết định dựa trên yêu cầu củ…"
+    },
+    {
+      "turn_id": "T0377",
+      "question_excerpt": "(Trang 25, đoạn được chọn: \"ReAct Tốt Ở Điểm Nào? Ưu điểm ■ Dễ đọc trace và debug ■ Tự quyết được bước tiếp theo từ observation ■ Phù hợp các bài toán search / booking / investiga…",
+      "answer_excerpt": "Đoạn nội dung trên trang 25 tổng kết các ưu điểm và hạn chế của mô hình ReAct (Reason + Act) trong việc xây dựng các Agent AI: **Về ưu điểm:** * **Dễ đọc trace và debug:** Do ReAct cấu trúc hóa các bước suy luận và hành động, giúp nhà phát…"
+    },
+    {
+      "turn_id": "T0702",
+      "question_excerpt": "(Trang 8, đoạn được chọn: \"Cao hơn do loop và nhiều calls\") Giải thích đoạn bôi đen ở Trang 8: \"Cao hơn do loop vànhiều calls\". Loop ở đây là gì",
+      "answer_excerpt": "Cụm từ \"Cao hơn do loop và nhiều calls\" tại trang 8 thường dùng để giải thích về độ phức tạp hoặc hiệu năng của Agent so với các mô hình phản hồi thông thường. Trong ngữ cảnh các Agent (như ReAct Agent), \"loop\" (vòng lặp) đề cập đến **vòng…"
+    },
+    {
+      "turn_id": "T0569",
+      "question_excerpt": "(Trang 15, đoạn được chọn: \"Bạn cần viết prompt cho chatbot hỗ trợ sinh viên VinUni đăng ký môn học. Xác định 4 thành phần: ■ Role: Chatbot là ai? Expertise level? ■ Task: Nhiệm v…",
+      "answer_excerpt": "Dựa trên các thành phần bạn đã nêu, dưới đây là ví dụ về cách viết prompt cho chatbot hỗ trợ sinh viên VinUni đăng ký môn học: * **Role (Vai trò):** Bạn là chuyên viên hỗ trợ học vụ tại VinUniversity, có kiến thức sâu rộng về quy định đào…"
+    },
+    {
+      "turn_id": "T0014",
+      "question_excerpt": "(Trang 81, đoạn được chọn: \"Key takeaways — 5 ý để mang về 1. LLM = cỗ máy Transformer đoán token tiếp theo từ context — mọi thứ khác là hệ quả. 2. Từ cỗ máy đoán chữ thành trợ lý…",
+      "answer_excerpt": "Đoạn nội dung bạn trích dẫn từ trang 81 tóm tắt các nguyên lý cốt lõi khi làm việc với LLM: 1. **Bản chất của LLM:** LLM thực chất là các mô hình Transformer được huấn luyện để dự đoán token (đơn vị văn bản) tiếp theo dựa trên ngữ cảnh đượ…"
+    },
+    {
+      "turn_id": "T0597",
+      "question_excerpt": "(Trang 12, đoạn được chọn: \"Zero-shot, One-shot, Few-shot, CoT\") Giải thích chi tiết sự khác biệt giữa 4 cái keyword trên, trả lời cho một sinh viên SE chưa hiểu gì về AI",
+      "answer_excerpt": "Chào bạn, với tư cách là sinh viên SE (Software Engineering), bạn có thể hiểu 4 kỹ thuật này như các phương pháp \"cấu hình\" input cho mô hình ngôn ngữ để đạt được kết quả mong muốn mà không cần huấn luyện lại nó: 1. **Zero-shot prompting:*…"
+    },
+    {
+      "turn_id": "T0739",
+      "question_excerpt": "(Trang 17, đoạn được chọn: \"tóm tắt các điểm chính trong bài học hôm nay\") tóm tắt các điểm chính trong bài học hôm nay",
+      "answer_excerpt": "Chào bạn! Hiện tại trong hệ thống slide bài giảng cho ngày học hôm nay (day05-slide-batch03-C401) không có một trang tổng kết cụ thể các điểm chính. Để mình có thể hỗ trợ bạn tốt nhất, bạn có thể cho mình biết bạn đang quan tâm đến chủ đề…"
+    },
+    {
+      "turn_id": "T0078",
+      "question_excerpt": "(Trang 5, đoạn được chọn: \"trình bày kĩ thuật prompt enginerring\") trình bày kĩ thuật prompt enginerring",
+      "answer_excerpt": "Chào bạn, rất vui được hỗ trợ bạn. Dựa trên nội dung tài liệu về ngày học này, khái niệm \"kỹ thuật Prompt Engineering\" chủ yếu tập trung vào việc thiết kế cấu trúc các yêu cầu gửi tới mô hình AI để đạt được kết quả mong muốn, đặc biệt là t…"
+    }
+  ],
+  "limitations": [
+    "Rating chỉ có ở một mẫu tự chọn rất nhỏ; tương quan không chứng minh quan hệ nhân quả.",
+    "Rule substantive_uncited là heuristic có thể có false positive/false negative.",
+    "citations=[] không tự động đồng nghĩa câu trả lời sai; đây là tín hiệu thiếu khả năng kiểm chứng."
+  ]
+}

@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Draft2Life — CP2 flow (Mock)</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --line:#272e38; --ink:#e6edf3; --mut:#8b949e;
+    --acc:#f0883e; --ok:#3fb950; --warn:#d29922; --bad:#f85149; --info:#58a6ff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.55 ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif}
+  header{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;
+         gap:14px;align-items:baseline;flex-wrap:wrap}
+  header h1{font-size:18px;margin:0;letter-spacing:.02em}
+  .tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--acc)}
+  .mockflag{font-size:12px;color:var(--mut);border:1px solid var(--line);
+            padding:2px 8px;border-radius:99px}
+  main{max-width:1180px;margin:0 auto;padding:24px}
+  .steps{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+  .steps div{font-size:12px;color:var(--mut);border:1px solid var(--line);
+             padding:5px 12px;border-radius:99px}
+  .steps div.on{color:var(--bg);background:var(--acc);border-color:var(--acc);font-weight:600}
+  .steps div.done{color:var(--ok);border-color:#1d3324}
+  section{display:none}
+  section.on{display:block}
+  h2{font-size:17px;margin:0 0 4px}
+  .sub{color:var(--mut);font-size:13px;margin:0 0 18px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+        padding:16px;cursor:pointer;transition:border-color .15s}
+  .card:hover{border-color:var(--acc)}
+  .card h3{margin:0 0 6px;font-size:15px}
+  .card p{margin:0;color:var(--mut);font-size:13px}
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+  @media(max-width:900px){.split{grid-template-columns:1fr}}
+  .box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+  .box h4{margin:0 0 10px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+  svg{width:100%;height:auto;display:block}
+  textarea{width:100%;background:#0b0f14;color:var(--ink);border:1px solid var(--line);
+           border-radius:8px;padding:12px;font:inherit;resize:vertical;min-height:76px}
+  button{font:inherit;cursor:pointer;border-radius:8px;padding:9px 16px;border:1px solid var(--line);
+         background:var(--panel);color:var(--ink)}
+  button:hover{border-color:var(--acc)}
+  button.primary{background:var(--acc);border-color:var(--acc);color:#1b1000;font-weight:600}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .chips{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .chip{text-align:left;font-size:13px;color:var(--mut);padding:9px 12px}
+  .chip b{color:var(--ink);font-weight:500}
+  .verdict{border-left:3px solid var(--mut);padding:14px 16px;border-radius:0 8px 8px 0;
+           background:var(--panel);margin-bottom:14px}
+  .verdict .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+  .verdict p{margin:8px 0 0}
+  .v-apply{border-color:var(--ok)}       .v-apply .lbl{color:var(--ok)}
+  .v-clarify{border-color:var(--warn)}   .v-clarify .lbl{color:var(--warn)}
+  .v-noev{border-color:var(--info)}      .v-noev .lbl{color:var(--info)}
+  .v-scope{border-color:var(--bad)}      .v-scope .lbl{color:var(--bad)}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  td{padding:6px 0;border-bottom:1px solid var(--line);color:var(--mut)}
+  td:last-child{text-align:right;color:var(--ink)}
+  .caveat{font-size:12px;color:var(--warn);margin-top:12px;line-height:1.5}
+  .trace{font:12px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--mut);
+         background:#0b0f14;border:1px solid var(--line);border-radius:8px;padding:12px;
+         white-space:pre-wrap;margin-top:14px}
+  .log{margin-top:8px;font-size:13px;color:var(--mut)}
+  .log li{margin:4px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="tag">Draft2Life</span>
+  <h1>Sửa mô hình 3D bằng một câu tiếng Việt</h1>
+  <span class="mockflag">CP2 · Mock — dữ liệu giả, chưa nối AI thật</span>
+</header>
+
+<main>
+  <div class="steps">
+    <div id="s1" class="on">1 · Chọn mặt bằng</div>
+    <div id="s2">2 · Xem không gian</div>
+    <div id="s3">3 · Gõ câu sửa</div>
+    <div id="s4">4 · AI quyết định</div>
+  </div>
+
+  <!-- ── B1 ─────────────────────────────────────────── -->
+  <section id="v1" class="on">
+    <h2>Chọn mô hình đang làm việc</h2>
+    <p class="sub">Bản Working sẽ là upload bản vẽ 2D. Bản Mock dùng 2 mặt bằng dựng sẵn.</p>
+    <div class="cards">
+      <div class="card" onclick="pickPlan('A')">
+        <h3>Căn hộ 48 m²</h3>
+        <p>Phòng khách · phòng ngủ · WC. <b>Không có phòng bếp riêng</b>.</p>
+      </div>
+      <div class="card" onclick="pickPlan('B')">
+        <h3>Văn phòng nhỏ 48 m²</h3>
+        <p>Khu làm việc · phòng họp · kho hồ sơ.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── B2 ─────────────────────────────────────────── -->
+  <section id="v2">
+    <h2 id="planName"></h2>
+    <p class="sub">Hiện trạng LOD 200. Mọi thay đổi sẽ đối chiếu lại với đúng mặt bằng này.</p>
+    <div class="split">
+      <div class="box"><h4>Mặt bằng 2D</h4><svg id="plan2d" viewBox="0 0 420 330"></svg></div>
+      <div class="box"><h4>Khối 3D</h4><svg id="plan3d" viewBox="0 0 420 330"></svg></div>
+    </div>
+    <div class="row">
+      <button onclick="go(3)" class="primary">Sửa một chi tiết →</button>
+      <button onclick="go(1)">← Đổi mặt bằng</button>
+    </div>
+  </section>
+
+  <!-- ── B3 ─────────────────────────────────────────── -->
+  <section id="v3">
+    <h2>Bạn muốn sửa chi tiết nào?</h2>
+    <p class="sub">Gõ như đang nói với đồng nghiệp — không phải thao tác trong Revit/3ds Max.</p>
+    <div class="split">
+      <div class="box">
+        <h4>Câu của bạn</h4>
+        <textarea id="cmd" placeholder="ví dụ: thêm một cửa sổ rộng 1m2 ở tường phía tây phòng khách"></textarea>
+        <div class="row"><button class="primary" onclick="decide()">Dựng thử →</button>
+          <button onclick="go(2)">← Quay lại</button></div>
+      </div>
+      <div class="box">
+        <h4>Câu mẫu — mỗi câu đi một đường khác nhau</h4>
+        <div class="chips" id="samples"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── B4 ─────────────────────────────────────────── -->
+  <section id="v4">
+    <h2>AI quyết định</h2>
+    <p class="sub" id="echo"></p>
+    <div class="split">
+      <div>
+        <div id="verdict"></div>
+        <div id="params"></div>
+        <div class="row" id="actions"></div>
+        <div class="trace" id="trace"></div>
+      </div>
+      <div class="box"><h4>Khối 3D sau thay đổi</h4><svg id="after3d" viewBox="0 0 420 330"></svg>
+        <div class="log"><h4 style="margin-top:14px">Nhật ký thay đổi</h4><ul id="hist"></ul></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ─────────────────────────────────────────────────────────
+   MOCK. Toàn bộ hàm decide() dưới đây là bảng tra cứng —
+   CP3 sẽ thay đúng hàm này bằng 1 lời gọi AI thật trả JSON
+   {route, params, question, reason}. Phần render giữ nguyên.
+   ───────────────────────────────────────────────────────── */
+
+const PLANS = {
+  A: { name:'Căn hộ 48 m² — hiện trạng', w:8, h:6,
+       rooms:[ {id:'khach', label:'Phòng khách', x:0,y:0,w:5,h:6},
+               {id:'ngu',   label:'Phòng ngủ',   x:5,y:0,w:3,h:3.5},
+               {id:'wc',    label:'WC',          x:5,y:3.5,w:3,h:2.5} ] },
+  B: { name:'Văn phòng nhỏ 48 m² — hiện trạng', w:8, h:6,
+       rooms:[ {id:'lam',  label:'Khu làm việc', x:0,y:0,w:5,h:6},
+               {id:'hop',  label:'Phòng họp',    x:5,y:0,w:3,h:3.5},
+               {id:'kho',  label:'Kho hồ sơ',    x:5,y:3.5,w:3,h:2.5} ] }
+};
+
+const SAMPLES = [
+  ['Thêm một cửa sổ rộng 1m2 ở tường phía tây phòng khách', 'đủ 3 tham số → dựng luôn'],
+  ['thêm cửa sổ',                                            'thiếu vị trí → hỏi lại 1 câu'],
+  ['mở rộng phòng bếp thêm 2m',                              'mặt bằng không có bếp → không dựng'],
+  ['bức tường giữa nhà đập được không?',                     'ngoài thẩm quyền → từ chối']
+];
+
+let plan = null, added = [], history = [];
+
+function go(n){
+  for (let i=1;i<=4;i++){
+    document.getElementById('v'+i).classList.toggle('on', i===n);
+    const s = document.getElementById('s'+i);
+    s.classList.toggle('on', i===n);
+    s.classList.toggle('done', i<n);
+  }
+  window.scrollTo(0,0);
+}
+
+function pickPlan(k){
+  plan = PLANS[k]; added = []; history = [];
+  document.getElementById('planName').textContent = plan.name;
+  draw2d('plan2d'); draw3d('plan3d');
+  const box = document.getElementById('samples');
+  box.innerHTML = '';
+  SAMPLES.forEach(([t,why]) => {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.innerHTML = '<b>“'+t+'”</b><br>→ '+why;
+    b.onclick = () => { document.getElementById('cmd').value = t; decide(); };
+    box.appendChild(b);
+  });
+  go(2);
+}
+
+/* ── vẽ 2D ─────────────────────────────────────────── */
+const PAD = 30, SC = 45;
+function draw2d(id){
+  const s = document.getElementById(id); s.innerHTML = '';
+  plan.rooms.forEach(r => {
+    s.innerHTML += `<rect x="${PAD+r.x*SC}" y="${PAD+r.y*SC}" width="${r.w*SC}" height="${r.h*SC}"
+      fill="#1c2430" stroke="#3d4757" stroke-width="2"/>
+      <text x="${PAD+(r.x+r.w/2)*SC}" y="${PAD+(r.y+r.h/2)*SC}" fill="#8b949e"
+      font-size="12" text-anchor="middle">${r.label}</text>
+      <text x="${PAD+(r.x+r.w/2)*SC}" y="${PAD+(r.y+r.h/2)*SC+16}" fill="#5a636e"
+      font-size="10" text-anchor="middle">${(r.w*r.h).toFixed(1)} m²</text>`;
+  });
+  added.forEach(el => { const seg = wallSeg(el);
+    s.innerHTML += `<line x1="${PAD+seg[0]*SC}" y1="${PAD+seg[1]*SC}" x2="${PAD+seg[2]*SC}"
+      y2="${PAD+seg[3]*SC}" stroke="#f0883e" stroke-width="5"/>`; });
+  s.innerHTML += `<text x="${PAD}" y="20" fill="#5a636e" font-size="10">↑ Bắc</text>`;
+}
+
+/* ── vẽ 3D iso ─────────────────────────────────────── */
+const C = Math.cos(Math.PI/6)*34, S = Math.sin(Math.PI/6)*34, HZ = 30;
+const px = (x,y)=> 210 + (x-y)*C;
+const py = (x,y,z)=> 70 + (x+y)*S - z*HZ;
+function quad(x1,y1,x2,y2,h,fill,op){
+  return `<polygon points="${px(x1,y1)},${py(x1,y1,0)} ${px(x2,y2)},${py(x2,y2,0)}
+    ${px(x2,y2)},${py(x2,y2,h)} ${px(x1,y1)},${py(x1,y1,h)}"
+    fill="${fill}" fill-opacity="${op||1}" stroke="#3d4757" stroke-width="1"/>`;
+}
+function draw3d(id){
+  const s = document.getElementById(id); s.innerHTML = '';
+  const W = plan.w, H = plan.h;
+  s.innerHTML += `<polygon points="${px(0,0)},${py(0,0,0)} ${px(W,0)},${py(W,0,0)}
+    ${px(W,H)},${py(W,H,0)} ${px(0,H)},${py(0,H,0)}" fill="#151b24" stroke="#3d4757"/>`;
+  const walls = [];
+  walls.push([0,0,W,0],[0,0,0,H],[W,0,W,H],[0,H,W,H]);              // bao ngoài
+  plan.rooms.forEach(r => { if(r.x>0) walls.push([r.x,r.y,r.x,r.y+r.h]);
+                            if(r.y>0) walls.push([r.x,r.y,r.x+r.w,r.y]); });
+  walls.sort((a,b)=>(a[0]+a[1]+a[2]+a[3])-(b[0]+b[1]+b[2]+b[3]));
+  walls.forEach(w => s.innerHTML += quad(w[0],w[1],w[2],w[3],2.8,'#1f2833',.95));
+  added.forEach(el => { const g = wallSeg(el);
+    s.innerHTML += quad(g[0],g[1],g[2],g[3],el.h||1.2,'#f0883e',.85); });
+}
+
+/* toạ độ đoạn tường của phần tử được thêm */
+function wallSeg(el){
+  const r = plan.rooms.find(x=>x.id===el.room);
+  const mid = { W:[r.x, r.y+r.h/2], E:[r.x+r.w, r.y+r.h/2],
+                N:[r.x+r.w/2, r.y],  S:[r.x+r.w/2, r.y+r.h] }[el.side];
+  const half = (el.w||1.2)/2;
+  return (el.side==='W'||el.side==='E')
+    ? [mid[0], mid[1]-half, mid[0], mid[1]+half]
+    : [mid[0]-half, mid[1], mid[0]+half, mid[1]];
+}
+
+/* ── QUYẾT ĐỊNH (mock — CP3 thay bằng AI call) ─────── */
+function decide(){
+  const t = document.getElementById('cmd').value.trim();
+  if(!t) return;
+  const low = t.toLowerCase();
+  let r;
+
+  if (/(đập|chịu lực|pccc|kết cấu|bao nhiêu tiền|báo giá|giấy phép)/.test(low)) {
+    r = { route:'scope', reason:'Câu hỏi thuộc thẩm quyền kỹ sư kết cấu / cơ quan thẩm duyệt.' };
+  } else if (/bếp|nhà bếp/.test(low) && !plan.rooms.some(x=>/bếp/.test(x.label.toLowerCase()))) {
+    r = { route:'noev', reason:'Mặt bằng đang mở không có phòng bếp.' };
+  } else if (/cửa sổ|cửa/.test(low) && !/(tây|đông|nam|bắc)/.test(low)) {
+    r = { route:'clarify', missing:'vị trí tường',
+          question:'Bạn muốn cửa sổ ở tường nào?' };
+  } else if (/cửa sổ/.test(low)) {
+    const side = /tây/.test(low)?'W' : /đông/.test(low)?'E' : /bắc/.test(low)?'N':'S';
+    /* "1m2" trong tiếng Việt = 1,2 m — bắt cả dạng này lẫn "1.2m" */
+    const m = low.match(/(\d+)\s*m\s*(\d)\b/) || low.match(/(\d+(?:[.,]\d+)?)\s*m/);
+    const w = m ? (m[2] ? parseFloat(m[1]) + parseInt(m[2])/10
+                       : parseFloat(m[1].replace(',','.'))) : 1.2;
+    r = { route:'apply', el:{ type:'Cửa sổ', room:plan.rooms[0].id, side, w, h:1.2 } };
+  } else {
+    r = { route:'clarify', missing:'đối tượng cần sửa',
+          question:'Bạn muốn thêm, bỏ hay đổi kích thước thứ gì?' };
+  }
+  render(t, r);
+}
+
+const SIDE = {W:'phía tây', E:'phía đông', N:'phía bắc', S:'phía nam'};
+
+function render(text, r){
+  document.getElementById('echo').textContent = 'Câu của bạn: “' + text + '”';
+  const V = document.getElementById('verdict'), P = document.getElementById('params'),
+        A = document.getElementById('actions');
+  P.innerHTML = ''; A.innerHTML = '';
+
+  if (r.route === 'apply') {
+    const room = plan.rooms.find(x=>x.id===r.el.room);
+    added.push(r.el);
+    history.push(`Thêm ${r.el.type.toLowerCase()} ${r.el.w}m × ${r.el.h}m — ${room.label}, tường ${SIDE[r.el.side]}`);
+    V.innerHTML = `<div class="verdict v-apply"><div class="lbl">Đã dựng</div>
+      <p>Đã thêm ${r.el.type.toLowerCase()} vào tường ${SIDE[r.el.side]} ${room.label.toLowerCase()}.</p></div>`;
+    P.innerHTML = `<div class="box"><h4>Thông số đã dùng</h4><table>
+      <tr><td>Phòng</td><td>${room.label}</td></tr>
+      <tr><td>Tường</td><td>${SIDE[r.el.side]}</td></tr>
+      <tr><td>Kích thước</td><td>${r.el.w} m × ${r.el.h} m</td></tr>
+      <tr><td>Cao bệ cửa</td><td>0,9 m (mặc định)</td></tr></table>
+      <p class="caveat">⚠ Thông số ước tính từ mặt bằng — kiểm lại trước khi xuất hồ sơ.</p></div>`;
+    btn(A,'Hoàn tác','', undo);
+    btn(A,'Không phải ý tôi →','', () => go(3));
+    btn(A,'Sửa tiếp','primary', () => go(3));
+  }
+
+  if (r.route === 'clarify') {
+    V.innerHTML = `<div class="verdict v-clarify"><div class="lbl">Cần thêm 1 thông tin</div>
+      <p>${r.question}</p><p style="color:var(--mut);font-size:13px">
+      Thiếu <b>${r.missing}</b>. Đoán bừa ở đây thì số sai đi thẳng vào hồ sơ xuất ra — nên hỏi lại.</p></div>`;
+    if (r.missing === 'vị trí tường') {
+      ['W','E','N','S'].forEach(sd => btn(A, SIDE[sd], '', () => {
+        document.getElementById('cmd').value = text + ' ở tường ' + SIDE[sd] + ' ' +
+          plan.rooms[0].label.toLowerCase();
+        decide();
+      }));
+    }
+    btn(A,'← Viết lại câu','', () => go(3));
+  }
+
+  if (r.route === 'noev') {
+    V.innerHTML = `<div class="verdict v-noev"><div class="lbl">Không có căn cứ trên mặt bằng</div>
+      <p>${r.reason} Mặt bằng hiện có: ${plan.rooms.map(x=>x.label).join(' · ')}.</p>
+      <p style="color:var(--mut);font-size:13px">Không dựng thêm phòng không tồn tại trong bản vẽ.</p></div>`;
+    btn(A,'Chọn phòng có sẵn','', () => go(3));
+    btn(A,'Đổi mặt bằng khác','', () => go(1));
+  }
+
+  if (r.route === 'scope') {
+    V.innerHTML = `<div class="verdict v-scope"><div class="lbl">Ngoài thẩm quyền</div>
+      <p>${r.reason} Draft2Life không kết luận được việc này và sẽ không đoán.</p>
+      <p style="color:var(--mut);font-size:13px">Việc làm được ngay: xuất bản vẽ hiện trạng kèm thông số
+      để bạn mang đi hỏi kỹ sư kết cấu.</p></div>`;
+    btn(A,'Xuất bản vẽ hiện trạng','primary', () => alert('[Mock] Sẽ tải bản vẽ mặt bằng + bảng thông số.'));
+    btn(A,'← Hỏi việc khác','', () => go(3));
+  }
+
+  document.getElementById('trace').textContent =
+    'route  = ' + r.route + '\nnguồn  = mặt bằng đang mở (' + plan.rooms.length + ' phòng)' +
+    '\nMOCK   — CP3 sẽ thay bằng 1 lời gọi AI thật tại đúng chỗ này';
+  document.getElementById('hist').innerHTML =
+    history.length ? history.map(h=>'<li>'+h+'</li>').join('') : '<li>chưa có thay đổi nào</li>';
+  draw3d('after3d');
+  go(4);
+}
+
+function btn(parent, label, cls, fn){
+  const b = document.createElement('button');
+  b.textContent = label; if(cls) b.className = cls; b.onclick = fn; parent.appendChild(b);
+}
+function undo(){
+  added.pop(); history.push('↩ Hoàn tác thay đổi cuối');
+  draw3d('after3d');
+  document.getElementById('hist').innerHTML = history.map(h=>'<li>'+h+'</li>').join('');
+}
+</script>
+</body>
+</html>

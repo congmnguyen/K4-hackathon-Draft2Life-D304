@@ -1,4 +1,47 @@
-# Mini Hackathon AI — Batch 03
+# Nhóm Draft2Life — D304 · Hướng C (Làn mở)
+
+> **Lát cắt:** Sinh viên kiến trúc đang có mô hình 3D dựng từ mặt bằng 2D · gõ một câu tiếng Việt
+> mô tả chi tiết muốn sửa · **AI quyết định câu đó đã đủ tham số để thực thi hay còn thiếu** ·
+> trả về mô hình đã cập nhật kèm thông số, hoặc đúng một câu hỏi làm rõ.
+
+## Thành viên & phân công
+
+| Mã HV | Tên | Phụ trách |
+|---|---|---|
+| 2A202601945 | **Nguyễn Minh Công** *(lead)* | Lát cắt & automation · `spec.md` · prompt + lời gọi AI thật trong `codebase/` (CP3) |
+| 01252 | **Nguyễn Văn Sáng** | Evidence Đường A (`scripts/analyze_survey.py`, `evidence/`) · bảng impact · log phỏng vấn |
+| 01784 | **Diệp Đức Lai** | Flow UI `codebase/index.html` · golden set `eval/` · validation log `validation/` |
+
+## Trạng thái mốc
+
+| Mốc | Artifact | Xong? |
+|---|---|---|
+| CP1 · Canvas | `checkpoints/cp1-canvas.md` · `evidence/survey-results.json` | ✅ |
+| CP2 · Bấm được | `codebase/index.html` (Mock, 4 đường đi) · `codebase/README.md` | ✅ |
+| CP3 · AI thật + đo lượt đầu | `codebase/` + `eval/` | ⬜ |
+| CP4 · `spec.md` (hạn cứng 23:59 N1) | `spec.md` | ⬜ |
+| CP5 · Validation + dry run | `validation/` · `demo-slides.pdf` | ⬜ |
+
+## Bằng chứng — Đường A (khảo sát), n = 123 người ngoài nhóm
+
+| Chỉ số | Số | % |
+|---|---|---|
+| Phải chỉnh sửa chi tiết (cửa/tường/nội thất) **nhiều lần** khi dựng 3D | 98/123 | 79,7% |
+| Sẵn sàng dùng công cụ AI cho việc này *(ngưỡng đề bài ≥50%)* | 94/123 | **76,4%** |
+| Mất ≥3 ngày cho một mô hình 3D từ bản vẽ 2D | 78/123 | 63,4% |
+| Muốn thử bản demo *(nguồn willing users)* | 109/123 | 88,6% |
+
+Tái tạo: `python3 scripts/analyze_survey.py --input "<CSV khảo sát>"`.
+**File khảo sát gốc chứa họ tên/email/SĐT nên không nằm trong repo**; script chỉ ghi ra số tổng hợp đã loại PII.
+
+## Dữ liệu
+
+Repo **không commit** `data/vlearn-pack/` (data pack khoá) và **không commit** CSV khảo sát gốc — theo mục
+"Bảo mật dữ liệu được cung cấp" bên dưới và ràng buộc 3 của `01-de-bai.md`.
+
+---
+
+# Đề bài gốc — Mini Hackathon AI Batch 03
 
 **SPEC → Prototype → Demo.** Đây không phải cuộc thi code — đây là cuộc thi **tư duy sản phẩm AI**.
 
