@@ -5,3 +5,4 @@ node_modules/
 # Khảo sát gốc chứa PII (họ tên/email/SĐT) — không bao giờ commit
 *.csv
 !eval/*.csv
+live-*.png
