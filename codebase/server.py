@@ -53,11 +53,15 @@ class Handler(SimpleHTTPRequestHandler):
         try:
             request = json.loads(self.rfile.read(length))
             plan, text = request["plan"], request["text"]
-            if not isinstance(plan, dict) or not plan.get("rooms"):
-                raise ValueError("plan không hợp lệ")
+            # decide() đọc plan["name"], guard() đọc room["id"] — thiếu là KeyError
+            # không ai bắt, đứt kết nối thay vì trả 400. Chặn ngay ở biên.
+            if not isinstance(plan, dict) or not plan.get("name") or not plan.get("rooms"):
+                raise ValueError("plan thiếu name hoặc rooms")
+            if not all(isinstance(r, dict) and r.get("id") for r in plan["rooms"]):
+                raise ValueError("có phòng thiếu id")
             if not isinstance(text, str) or not text.strip():
                 raise ValueError("text rỗng")
-        except (json.JSONDecodeError, KeyError, ValueError) as exc:
+        except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             self._send_json(HTTPStatus.BAD_REQUEST, {"error": f"Request không hợp lệ: {exc}"})
             return
 
