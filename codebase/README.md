@@ -52,7 +52,7 @@ Khối `<div class="trace">` ở bước 4 in ra route + nguồn sự thật đa
 ## Kiểm thử
 
 - Click-through toàn bộ 4 route qua server thật bằng Playwright — không lỗi runtime.
-- Golden set 30 case: `eval/golden-set.jsonl`. Lượt 1 **80,0%** → lượt 2 **90,0%** (bar 85%).
+- Golden set 31 case: `eval/golden-set.jsonl`. 5 lượt: **80,0% → 90,0% → 90,0% (trượt D2) → 96,7% → 100,0%** (bar 85%).
 - Bộ đo gọi đúng `decide.py` mà bản demo dùng — không có đường code riêng cho eval.
 
 ## File
